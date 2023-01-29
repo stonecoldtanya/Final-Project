@@ -1,27 +1,21 @@
 package checkers;
 
-public class Pair<L, R>{
-    private L left;
-    private R right;
+public class Pair <K,V> {
 
-    public Pair(L left, R right) {
-        this.left = left;
-        this.right = right;
+    private final K key;
+    private final V value;
+
+    public Pair(K key, V value) {
+        this.key = key;
+        this.value = value;
+
     }
 
-    public L getLeft() {
-        return this.left;
+    public K getKey() {
+        return key;
     }
 
-    public void setLeft(L left) {
-        this.left = left;
-    }
-
-    public R getRight() {
-        return this.right;
-    }
-
-    public void setRight(R right) {
-        this.right = right;
+    public V getValue() {
+        return value;
     }
 }

@@ -5,9 +5,10 @@ import java.util.function.Consumer;
 public class LinkedListImpl<E> {
     private Node<E> head;
     private int size = 0;
-
+    private Node<E> tail;
     public LinkedListImpl() {
         head = null;
+        tail = null;
     }
 
     void add(E element) {
@@ -17,6 +18,24 @@ public class LinkedListImpl<E> {
         }
         this.head = newNode;
         size++;
+    }
+
+    public void insert(E element) {
+        Node<E> newNode = new Node<E>(element);
+        if(!isEmpty()){
+            getFinal().next = newNode;
+        } else {
+            head = newNode;
+        }
+        size++;
+    }
+
+    public Node<E> getFinal(){
+        Node<E> node = head;
+        while (node.next != null) {
+            node = node.next;
+        }
+        return node;
     }
 
     boolean isEmpty() {
@@ -45,27 +64,27 @@ public class LinkedListImpl<E> {
         return result;
     }
 
-    void add(int pos, E element) {
-        if (pos > size) {
+    void add(int position, E element) {
+        if (position > size()) {
             return;
         }
-        if (pos == 0) {
-            Node<E> newTemp = head;
+        if (position == 0) {
+            Node<E> current = head;
             head = new Node<E>(element);
-            head.next = newTemp;
+            head.next = current;
+            size++;
             return;
         }
-        // node for traversal
-        Node<E> newTemp = head;
-        // Dummy node
+
+        Node<E> current = head;
         Node<E> prev = new Node<E>(null);
-        while (pos > 0) {
-            prev = newTemp;
-            newTemp = newTemp.next;
-            pos--;
+        while (position > 0) {
+            prev = current;
+            current = current.next;
+            position--;
         }
         prev.next = new Node<E>(element);
-        prev.next.next = newTemp;
+        prev.next.next = current;
         size++;
     }
 
@@ -78,14 +97,14 @@ public class LinkedListImpl<E> {
     int indexOf(E element) {
         int index = 0;
         if (element == null) {
-            for (Node<E> currentNode = head; currentNode != null; currentNode = currentNode.next) {
-                if (currentNode.info == null)
+            for (Node<E> current = head; current != null; current = current.next) {
+                if (current.info == null)
                     return index;
                 index++;
             }
         } else {
-            for (Node<E> currentNode = head; currentNode != null; currentNode = currentNode.next) {
-                if (element.equals(currentNode.info))
+            for (Node<E> current = head; current != null; current = current.next) {
+                if (element.equals(current.info))
                     return index;
                 index++;
             }
@@ -96,7 +115,6 @@ public class LinkedListImpl<E> {
 
     void removeEl(E info) {
         if (head == null) return;
-        size--;
         if (head.info == info) {
             head = head.next;
             size--;
@@ -106,6 +124,7 @@ public class LinkedListImpl<E> {
         while (current.next != null) {
             if (current.next.info == info) {
                 current.next = current.next.next;
+                size--;
                 return;
             }
             current = current.next;
@@ -114,13 +133,12 @@ public class LinkedListImpl<E> {
 
     void remove(int position) {
         removeEl(get(position));
-        //fix
     }
 
     public int size() {
         if (head == null) return 0;
         int counter = 0;
-        for (Node<E> curr = head; curr != null; curr = curr.next)
+        for (Node<E> current = head; current != null; current = current.next)
             counter++;
         return counter;
     }
@@ -134,39 +152,78 @@ public class LinkedListImpl<E> {
     }
 
     void dump() {
-        for (Node<E> n = head; n != null; n = n.next)
-            System.out.print(n.info + " ");
+        for (Node<E> node = head; node != null; node = node.next)
+            System.out.print(node.info + " ");
     }
 
-    public LinkedListImpl<E> subList(int fromIndex, int toIndex)
+    public LinkedListImpl<E> subList(int start, int end)
             throws IndexOutOfBoundsException {
-        if(fromIndex<0 || fromIndex>size() || toIndex<fromIndex || toIndex>size()){
+        if(start < 0 || start > size() || end < start || end > size()){
             throw new IndexOutOfBoundsException();
         }
 
-        LinkedListImpl<E> n = new LinkedListImpl<E>();
+        LinkedListImpl<E> list = new LinkedListImpl<E>();
         Node<E> startNode = head;
         int counter=0;
-        while(startNode!=null){
-            if(counter>fromIndex && counter<toIndex){
-                n.add((E) startNode);
+        while(startNode != null){
+            if(counter >= start && counter <= end){
+                list.add(startNode.getInfo());
             }
-            startNode=startNode.next;
+            startNode = startNode.next;
             counter++;
         }
-        return n;
+        return list;
+    }
+
+    public void reverse() {
+        if (!isEmpty()){
+            throw new NullPointerException("it's empty");
+        }
+
+        if (size() == 1) {
+            return;
+        }
+
+        else if (size() == 2) {
+            tail.setNext(head);
+            head = tail;
+            tail = head.getNext();
+            tail.setNext(null);
+        }
+
+        else {
+            Node<E> current = head;
+            Node<E> currentNext = head.getNext();
+            Node<E> currentNextNext = currentNext.getNext();
+            tail = head;
+
+            while (currentNext != null) {
+                currentNext.setNext(current);
+                current = currentNext;
+                currentNext = currentNextNext;
+                if (currentNextNext != null) {
+                    currentNextNext = currentNextNext.getNext();
+                }
+            }
+            tail.setNext(null);
+            head = current;
+        }
     }
 
     public String toString() {
-        String S = "";
-        Node<E> X = head;
-        if (X == null)
-            return S + "";
-        while (X.next != null) {
-            S += X.info + " ";
-            X = X.next;
+        String str = "";
+        Node<E> current = head;
+        if (current == null)
+            return str+ "";
+        while (current.next != null) {
+            str += current.info + " ";
+            current = current.next;
         }
-        S += String.valueOf(X.info);
-        return S + " ";
+       str += String.valueOf(current.info);
+        return str + " ";
+    }
+
+    public int getSize() {
+        return size;
     }
 }

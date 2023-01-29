@@ -1,6 +1,6 @@
 package ds;
 
-public class Node<E>{
+public class Node<E> implements Comparable<E>{
     E info;
     Node next;
     Node prev;
@@ -21,5 +21,20 @@ public class Node<E>{
 
     public Node getPrev() {
         return prev;
+    }
+
+    public void setNext(Node next) {
+        this.next = next;
+    }
+
+
+    @Override
+    public int compareTo(E o) {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return info.toString();
     }
 }

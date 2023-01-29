@@ -49,4 +49,9 @@ public class Stack<E> implements Structure<E>{
     public int find(E element) {
         return list.indexOf(element);
     }
+
+    @Override
+    public String toString() {
+        return this.list.toString();
+    }
 }
