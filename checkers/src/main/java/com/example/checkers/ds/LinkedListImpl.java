@@ -1,17 +1,29 @@
-package ds;
+package com.example.checkers.ds;
 
 import java.util.function.Consumer;
 
+/**
+ * Implementation of a Linked list.
+ *
+ * @param <E> the type parameter
+ */
 public class LinkedListImpl<E> {
     private Node<E> head;
     private int size = 0;
     private Node<E> tail;
+
+    /**
+     * Instantiates a new Linked list.
+     */
     public LinkedListImpl() {
         head = null;
         tail = null;
     }
 
-    void add(E element) {
+    /**
+     * Adds an element to the start of the list.
+     */
+    public void add(E element) {
         Node<E> newNode = new Node<E>(element);
         if (!isEmpty()) {
             newNode.next = head;
@@ -20,6 +32,9 @@ public class LinkedListImpl<E> {
         size++;
     }
 
+    /**
+     * Adds an element to the end of the list.
+     */
     public void insert(E element) {
         Node<E> newNode = new Node<E>(element);
         if(!isEmpty()){
@@ -30,6 +45,9 @@ public class LinkedListImpl<E> {
         size++;
     }
 
+    /**
+     * Returns the last node added.
+     */
     public Node<E> getFinal(){
         Node<E> node = head;
         while (node.next != null) {
@@ -38,15 +56,20 @@ public class LinkedListImpl<E> {
         return node;
     }
 
-    boolean isEmpty() {
-        // Checking if head node points to null
+    /**
+     * Checks if the list is empty. Returns false, if there are elements present in the list and true, if there aren't any.
+     */
+    public boolean isEmpty() {
         if (head == null) {
             return true;
         }
         return false;
     }
 
-    E get(int index) {
+    /**
+     * Returns an element based on its index in the list. The position it's on.
+     */
+    public E get(int index) {
         checkIndex(index);
         E result = null;
         int currentIndex = 0;
@@ -64,7 +87,13 @@ public class LinkedListImpl<E> {
         return result;
     }
 
-    void add(int position, E element) {
+    /**
+     * Adds an element to a given position in the list.
+     *
+     * @param position the position we are adding the element at.
+     * @param element  the element being added.
+     */
+    public void add(int position, E element) {
         if (position > size()) {
             return;
         }
@@ -94,6 +123,9 @@ public class LinkedListImpl<E> {
         }
     }
 
+    /**
+     * Returns the index/position in the list of an element.
+     */
     int indexOf(E element) {
         int index = 0;
         if (element == null) {
@@ -113,16 +145,20 @@ public class LinkedListImpl<E> {
 
     }
 
-    void removeEl(E info) {
+    /**
+     * Removes and element from the list.
+     *
+     */
+    void removeEl(E element) {
         if (head == null) return;
-        if (head.info == info) {
+        if (head.info == element) {
             head = head.next;
             size--;
             return;
         }
         Node<E> current = head;
         while (current.next != null) {
-            if (current.next.info == info) {
+            if (current.next.info == element) {
                 current.next = current.next.next;
                 size--;
                 return;
@@ -131,10 +167,18 @@ public class LinkedListImpl<E> {
         }
     }
 
+    /**
+     * Removes an element from a given position.
+     *
+     * @param position the position we want to remove an element from.
+     */
     void remove(int position) {
         removeEl(get(position));
     }
 
+    /**
+     * @return the number of elements present in the list.
+     */
     public int size() {
         if (head == null) return 0;
         int counter = 0;
@@ -143,6 +187,11 @@ public class LinkedListImpl<E> {
         return counter;
     }
 
+    /**
+     * For each.
+     *
+     * @param consumer the consumer
+     */
     void forEach(Consumer<E> consumer) {
         Node<E> currentNode = this.head;
         while (currentNode != null) {
@@ -151,11 +200,21 @@ public class LinkedListImpl<E> {
         }
     }
 
+    /**
+     * Prints the elements in the list.
+     */
     void dump() {
         for (Node<E> node = head; node != null; node = node.next)
             System.out.print(node.info + " ");
     }
 
+    /**
+     * Creates a sublist made by the elements of the already existing list from a starting position in it to an end.
+     *
+     * @param start the position of the first element we are adding to the new list.
+     * @param end  the position of the last element added to the sublist.
+     * @throws IndexOutOfBoundsException if the start and end element are not of proper values.
+     */
     public LinkedListImpl<E> subList(int start, int end)
             throws IndexOutOfBoundsException {
         if(start < 0 || start > size() || end < start || end > size()){
@@ -175,6 +234,9 @@ public class LinkedListImpl<E> {
         return list;
     }
 
+    /**
+     * Reverses the list.
+     */
     public void reverse() {
         if (!isEmpty()){
             throw new NullPointerException("it's empty");
@@ -221,9 +283,5 @@ public class LinkedListImpl<E> {
         }
        str += String.valueOf(current.info);
         return str + " ";
-    }
-
-    public int getSize() {
-        return size;
     }
 }

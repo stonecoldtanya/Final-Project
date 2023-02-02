@@ -1,7 +1,7 @@
 package com.example.checkers.checkers;
 
 public class Board {
-    private final int BOARD_LENGTH = 10;
+    private int boardLength;
     private Piece[][] board;
     private int pieceWhite;
     private int pieceBlack;
@@ -9,10 +9,11 @@ public class Board {
     private int queenBlack;
 
 
-    public Board() {
+    public Board(int boardLength) {
+        this.boardLength = boardLength;
         this.board = getInitBoard();
-        this.pieceBlack= 12;
-        this.pieceWhite = 12;
+        this.pieceBlack= boardLength / 2 * (boardLength / 2 - 1);
+        this.pieceWhite = boardLength / 2 * (boardLength / 2 - 2);
         this.queenBlack = 0;
         this.queenWhite = 0;
     }
@@ -20,10 +21,10 @@ public class Board {
     public Board(Piece[][] board) {
         this.pieceWhite = 0;
         this.pieceBlack = 0;
-        this.board = new Piece[BOARD_LENGTH][BOARD_LENGTH];
+        this.board = new Piece[boardLength][boardLength];
 
-        for (int i = 0; i < BOARD_LENGTH; i++) {
-            for (int j = (i + 1) % 2; j < BOARD_LENGTH; j += 2) {
+        for (int i = 0; i < boardLength; i++) {
+            for (int j = (i + 1) % 2; j < boardLength; j += 2) {
                 Piece oldPiece = board[i][j];
                 if (oldPiece != null) {
                     addQueens(oldPiece);
@@ -63,9 +64,9 @@ public class Board {
         }
     }
     private Piece[][] getInitBoard() {
-        Piece[][] newBoard = new Piece[BOARD_LENGTH][BOARD_LENGTH];
-        for (int i = 0; i < BOARD_LENGTH; i++) {
-            for (int j = 0; j < BOARD_LENGTH / 2 - 1; j++) {
+        Piece[][] newBoard = new Piece[boardLength][boardLength];
+        for (int i = 0; i < boardLength; i++) {
+            for (int j = 0; j < boardLength / 2 - 1; j++) {
                 if (i % 2 == 1 && j % 2 ==0) {
                     newBoard[j][i] = new Piece('w');
                }
@@ -73,7 +74,7 @@ public class Board {
                     newBoard[j][i] = new Piece('w');
                 }
                 }
-            for (int j = BOARD_LENGTH - 1; j > BOARD_LENGTH / 2; j--) {
+            for (int j = boardLength - 1; j > boardLength / 2; j--) {
                 if (i % 2 == 0 && j % 2 ==1) {
                     newBoard[j][i] = new Piece('b');
                 }
@@ -89,10 +90,14 @@ public class Board {
     public String toString() {
         StringBuilder boardString = new StringBuilder();
         boardString.append("  Let's start the game\n");
-        for (int i = 0; i < BOARD_LENGTH; i++) {
-            for (int j = 0; j < BOARD_LENGTH; j++) {
+        for (int i = 0; i < boardLength; i++) {
+            for (int j = 0; j < boardLength; j++) {
                 if (j == 0) {
-                    boardString.append(i + 1).append(" ");
+                    if(i < 9){
+                        boardString.append(0).append(i + 1).append("  ");
+                    }else {
+                        boardString.append(i + 1).append("  ");
+                    }
                 }
                 Piece piece = board[i][j];
                 if (piece == null) {
@@ -106,10 +111,25 @@ public class Board {
                 }
                 boardString.append(" ");
             }
-            boardString.append(i + 1).append("\n");
+            if(i < 9){
+                boardString.append(" " + 0).append(i + 1).append("\n");
+            }else {
+                boardString.append(" ").append(i + 1).append("\n");
+            }
         }
         boardString.append(" \n");
         return boardString.toString();
     }
 
+    public int getPieceWhite() {
+        return pieceWhite;
+    }
+
+    public int getPieceBlack() {
+        return pieceBlack;
+    }
+
+    public int getBoardLength() {
+        return boardLength;
+    }
 }
