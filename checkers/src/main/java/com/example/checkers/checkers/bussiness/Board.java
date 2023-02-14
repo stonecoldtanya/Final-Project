@@ -1,14 +1,23 @@
 package com.example.checkers.checkers;
 
+/**
+ * Class representing the gaming board.
+ */
 public class Board {
     private int boardLength;
     private Piece[][] board;
+    private Move start;
     private int pieceWhite;
     private int pieceBlack;
     private int queenWhite;
     private int queenBlack;
 
 
+    /**
+     * Instantiates a new Board.
+     *
+     * @param boardLength the dimension of the board
+     */
     public Board(int boardLength) {
         this.boardLength = boardLength;
         this.board = getInitBoard();
@@ -18,6 +27,11 @@ public class Board {
         this.queenWhite = 0;
     }
 
+    /**
+     * Instantiates a new Board.
+     *
+     * @param board the board
+     */
     public Board(Piece[][] board) {
         this.pieceWhite = 0;
         this.pieceBlack = 0;
@@ -28,10 +42,32 @@ public class Board {
                 Piece oldPiece = board[i][j];
                 if (oldPiece != null) {
                     addQueens(oldPiece);
-                    this.board[i][j] = new Piece(oldPiece.isQueen(), oldPiece.getColor());
+                    this.board[i][j] = new Piece(oldPiece.getColor());
                 }
             }
         }
+    }
+    public Piece getPiece(int row, int col) {
+        return board[row][col];
+    }
+
+    public Piece[][] copy(Piece[][] board) {
+        Piece[][] result = new Piece[boardLength][boardLength];
+        for (int i = 0; i < boardLength; i++) {
+            for (int j = (i + 1) % 2; j < boardLength; j += 2) {
+                Piece oldPiece = board[i][j];
+                if (oldPiece != null) {
+                    result[i][j] = new Piece(oldPiece.getColor());
+                }
+            }
+        }
+        return result;
+    }
+
+    public Board update(Move move){
+        Piece[][] current = copy(board);
+
+        return new Board(current);
     }
 
     private void addQueens(Piece upgraded){
@@ -42,6 +78,7 @@ public class Board {
             this.queenBlack++;
         }
     }
+
 
     private void removePiece(Piece taken){
         if (taken != null){
@@ -63,6 +100,10 @@ public class Board {
             }
         }
     }
+
+    /**
+     * Method that creates the initial state of the board.
+     */
     private Piece[][] getInitBoard() {
         Piece[][] newBoard = new Piece[boardLength][boardLength];
         for (int i = 0; i < boardLength; i++) {
@@ -85,6 +126,31 @@ public class Board {
         }
             return newBoard;
         }
+
+    /**
+     * returns the number of white pieces on the board.
+     */
+    public int getPieceWhite() {
+        return pieceWhite;
+    }
+
+    /**
+     * returns the number of black pieces on the board.
+     */
+    public int getPieceBlack() {
+        return pieceBlack;
+    }
+
+    /**
+     * returns the dimension of the board.
+     */
+    public int getBoardLength() {
+        return boardLength;
+    }
+
+    public Piece[][] getBoard() {
+        return board;
+    }
 
     @Override
     public String toString() {
@@ -119,17 +185,5 @@ public class Board {
         }
         boardString.append(" \n");
         return boardString.toString();
-    }
-
-    public int getPieceWhite() {
-        return pieceWhite;
-    }
-
-    public int getPieceBlack() {
-        return pieceBlack;
-    }
-
-    public int getBoardLength() {
-        return boardLength;
     }
 }

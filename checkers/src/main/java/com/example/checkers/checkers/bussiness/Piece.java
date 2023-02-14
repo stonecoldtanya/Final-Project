@@ -13,27 +13,37 @@ public class Piece {
         this.isQueen = false;
     }
 
-    public Piece(boolean isQueen, char color) {
-        this.isQueen = isQueen;
+    public Piece(char color) {
         this.color = color;
     }
 
-    public Piece(char color) {
+    public Piece(char color, Point position){
         this.color = color;
         this.player = getPlayer();
+        this.position = position;
         this.isQueen = false;
+    }
+
+    @Override
+    public String toString() {
+        return "[Piece color=" + color + ", position=" + position + ", isQueen="
+                + isQueen + "]";
     }
 
     public Player getPlayer() {
         return player;
     }
 
-    boolean isQueen() {
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public boolean isQueen() {
         return isQueen;
     }
 
-    void setQueen() {
-        isQueen = true;
+    public void setQueen(boolean queen) {
+        isQueen = queen;
     }
 
     public char getColor() {
@@ -42,5 +52,13 @@ public class Piece {
 
     public void setColor(char color) {
         this.color = color;
+    }
+
+    public Point getPosition() {
+        return position;
+    }
+
+    public void setPosition(Point position) {
+        this.position = position;
     }
 }

@@ -11,13 +11,10 @@ public enum Difficulty {
      */
     EASY( 1, "Easy"),
     /**
-     * Playable difficulty.
+     * Normal difficulty.
      */
     PLAYABLE(2, "Playable"),
-    /**
-     * Medium difficulty.
-     */
-    MEDIUM(3, "Medium"),
+
     /**
      * Hard difficulty.
      */
@@ -25,7 +22,7 @@ public enum Difficulty {
     /**
      * The Bot expert.
      */
-    BOT_EXPERT(5, "Expert bot mode");
+    BOT_EXPERT(6, "Expert bot mode");
 
     private final int depthDifficulty;
     private final String stringValue;
