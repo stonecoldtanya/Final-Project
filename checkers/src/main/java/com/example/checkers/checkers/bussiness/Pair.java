@@ -1,4 +1,4 @@
-package com.example.checkers.checkers;
+package com.example.checkers.checkers.bussiness;
 
 public class Pair <K,V> {
 

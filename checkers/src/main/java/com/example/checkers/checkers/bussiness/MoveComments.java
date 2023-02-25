@@ -1,4 +1,4 @@
-package com.example.checkers.checkers;
+package com.example.checkers.checkers.bussiness;
 
 public enum MoveComments {
     NOT_DIAGONAL ("You can only move diagonally."),

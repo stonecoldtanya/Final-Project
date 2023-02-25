@@ -1,4 +1,4 @@
-package com.example.checkers.checkers;
+package com.example.checkers.checkers.bussiness;
 
 /**
  * The enum Difficulty.
@@ -9,20 +9,20 @@ public enum Difficulty {
     /**
      * Easy difficulty.
      */
-    EASY( 1, "Easy"),
+    EASY( 3, "Easy"),
     /**
      * Normal difficulty.
      */
-    PLAYABLE(2, "Playable"),
+    PLAYABLE(5, "Playable"),
 
     /**
      * Hard difficulty.
      */
-    HARD(4, "Hard"),
+    HARD(9, "Hard"),
     /**
      * The Bot expert.
      */
-    BOT_EXPERT(6, "Expert bot mode");
+    BOT_EXPERT(100, "Expert bot mode");
 
     private final int depthDifficulty;
     private final String stringValue;
@@ -45,4 +45,5 @@ public enum Difficulty {
     public String toString() {
         return this.stringValue;
     }
+
 }

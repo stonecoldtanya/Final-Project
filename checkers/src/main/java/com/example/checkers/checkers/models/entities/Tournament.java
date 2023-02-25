@@ -1,2 +1,4 @@
-package com.example.checkers.checkers.models.entities;public class Tournament {
-}
+//package com.example.checkers.checkers.models.entities;
+//
+//public class Tournament {
+//}

@@ -1,4 +1,8 @@
-package com.example.checkers.checkers;
+package com.example.checkers.checkers.bussiness;
+
+import com.example.checkers.checkers.bussiness.Board;
+import com.example.checkers.checkers.bussiness.Move;
+import org.springframework.stereotype.Component;
 
 public interface Player {
 
@@ -6,6 +10,7 @@ public interface Player {
 
     public Move getNextMove(Board board);
 
+    public char getColour();
 
 }
 

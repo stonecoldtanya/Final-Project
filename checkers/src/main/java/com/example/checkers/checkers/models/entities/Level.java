@@ -1,2 +1,4 @@
-package com.example.checkers.checkers.models.entities;public class Level {
-}
+//package com.example.checkers.checkers.models.entities;
+//
+//public class Level {
+//}
