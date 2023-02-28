@@ -7,8 +7,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Component
+//@Component
 public class GamePlay {
+
     private Board b;
     private Player player1;
     private Player player2;
@@ -19,11 +20,10 @@ public class GamePlay {
 
     private Integer finalScore;
 
-    @Autowired
     public GamePlay(Piece[][]startingState) {
         this.b = new Board(startingState);
     }
-
+    @Autowired
     public GamePlay(Board board) {
         this.b = board;
     }
@@ -48,10 +48,8 @@ public class GamePlay {
             System.out.println("Both player should join before the game begins");
             return;
         }
-
         Player whoseTurn = b.isBTPlayer() ? player1 : player2;
         int movesLeft = moves;
-
 
         while (b.isFinal() && movesLeft != 0) {
             Move move = whoseTurn.getNextMove(b);
@@ -65,21 +63,18 @@ public class GamePlay {
         }
         if (movesLeft == 0){
             System.out.printf("Game Over!\n");
-            if (this.b.getPieceWhite() <this.b.getPieceBlack()){
+            if (b.getPieceWhite() < b.getPieceBlack()){
                 Player BTPlayer = b.isBTPlayer() ? player1 : player2;
                 System.out.printf("Our current winner is %s! Well done! \n", BTPlayer.getName());
             }
-            if (this.b.getPieceBlack() < this.b.getPieceWhite()){
+            if (b.getPieceBlack() < b.getPieceWhite()){
                 Player NotBTPlayer = !b.isBTPlayer() ? player1 : player2;
                 System.out.printf("Our current winner is %s! Well done! \n", NotBTPlayer.getName());
             }
             else {
                 System.out.printf("It's a draw! What a shame!");
             }
-            System.out.printf("Game Over!\n");
-
         }
-
         if (!b.isFinal()) {
             finalScore = b.getScore();
 
@@ -95,13 +90,13 @@ public class GamePlay {
         }
     }
 
-
     public void move(Move move) {
         this.b = this.b.update(move);
 
     }
 
-
+    @Autowired
+    @Qualifier("boarded")
     public Board getState() {
         return this.b;
     }

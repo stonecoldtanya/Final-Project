@@ -13,6 +13,7 @@ import java.util.Arrays;
 /**
  * Class representing the gaming board.
  */
+@Component
 public class Board {
     private int boardLength;
     private Piece[][] board;
@@ -40,7 +41,7 @@ public class Board {
     public Board(int boardLength) {
         this.boardLength = boardLength;
         this.board = getInitBoard();
-        this.pieceBlack= boardLength / 2 * (boardLength / 2 - 1);
+        this.pieceBlack = boardLength / 2 * (boardLength / 2 - 1);
         this.pieceWhite = boardLength / 2 * (boardLength / 2 - 1);
         this.queenBlack = 0;
         this.queenWhite = 0;
@@ -54,13 +55,13 @@ public class Board {
     public Board(Piece[][] board) {
         this.boardLength = board.length;
         this.board = new Piece[board.length][board.length];
-        this.pieceBlack= boardLength / 2 * (boardLength / 2 - 1);
-        this.pieceWhite = boardLength / 2 * (boardLength / 2 - 1);
+        this.pieceBlack= 0;
+        this.pieceWhite = 0;
         for (int i = 0; i < board.length; i++) {
             for (int j = (i + 1) % 2; j < board.length; j += 2) {
                 Piece oldPiece = board[i][j];
                 if (oldPiece != null) {
-//                    addQueens(oldPiece);
+                    addPiece(oldPiece);
                     this.board[i][j] = new Piece(oldPiece.getColour());
                 }
             }
@@ -120,6 +121,7 @@ public class Board {
         }
         return true;
     }
+
     public Board update(Move move){
         Piece[][] stateCopy = deepCopy(board);
         Point current = move.getCurrent();
@@ -139,28 +141,14 @@ public class Board {
         return new Board(stateCopy);
     }
 
-    private void upgradedPieces(List<Move> moves, char colour) {
-        for (Move m : moves) {
-            Piece piece = getPiece(m.getCurrent().x, m.getCurrent().y);
-            if (m.next.x == 0 && colour== 'b') {
-                m.setQueenPiece();
-                piece.setQueen(true);
-                addQueens(piece);
-            } else if (m.next.x == 7 && piece.getColour() == 'w') {
-                m.setQueenPiece();
-                piece.setQueen(true);
-                addQueens(piece);
-            }
-        }
-    }
     public List<Move> prioritiseJumpMoves(Board board, char colour){
         List<Move> jumpMoves = new ArrayList<>(getJumps(board, colour));
         List<Move> regularMoves = new ArrayList<>(getNonJumpMoves(board, colour));
         if (jumpMoves.isEmpty()){
-            upgradedPieces(regularMoves, colour);
+            addQueens(regularMoves, colour);
             return regularMoves;
         }
-        upgradedPieces(jumpMoves, colour);
+        addQueens(jumpMoves, colour);
         return jumpMoves;
 
     }
@@ -256,6 +244,7 @@ public class Board {
         }
         return posMoves;
     }
+
     public List<Move> getJumps(Board board, char colour){
         List<Move> moves = possibleMoves(board, colour);
         List<Move> jumpMoves = new ArrayList<>();
@@ -294,12 +283,22 @@ public class Board {
         return jumpMoves;
     }
 
-    private void addQueens(Piece upgraded){
-        if (upgraded.getColour() == 'w'){
-            this.queenWhite++;
+    private void addPiece(Piece added){
+        if (added.getColour() == 'w'){
+            if (added.isQueen()){
+                this.queenWhite++;
+            }
+            else {
+                this.pieceWhite++;
+            }
         }
         else {
-            this.queenBlack++;
+            if (added.isQueen()){
+                this.queenBlack++;
+            }
+            else{
+                this.pieceBlack++;
+            }
         }
     }
 
@@ -320,6 +319,21 @@ public class Board {
                 else{
                     this.pieceBlack--;
                 }
+            }
+        }
+    }
+
+    private void addQueens(List<Move> moves, char colour) {
+        for (Move m : moves) {
+            Piece piece = getPiece(m.getCurrent().x, m.getCurrent().y);
+            if (m.next.x == 0 && colour== 'b') {
+                m.setQueenPiece();
+                piece.setQueen(true);
+                addPiece(piece);
+            } else if (m.next.x == 7 && piece.getColour() == 'w') {
+                m.setQueenPiece();
+                piece.setQueen(true);
+                addPiece(piece);
             }
         }
     }
@@ -357,41 +371,9 @@ public class Board {
         }
         return newBoard;
     }
+
     public boolean isFinal() {
         return (getScore() != null);
-    }
-
-    /**
-     * returns the number of white pieces on the board.
-     */
-    public int getPieceWhite() {
-        return this.pieceWhite;
-    }
-
-    /**
-     * returns the number of black pieces on the board.
-     */
-    public int getPieceBlack() {
-        return pieceBlack;
-    }
-
-    /**
-     * returns the dimension of the board.
-     */
-    public int getBoardLength() {
-        return boardLength;
-    }
-
-    public Piece[][] getBoard() {
-        return board;
-    }
-
-    public int getQueenWhite() {
-        return queenWhite;
-    }
-
-    public int getQueenBlack() {
-        return queenBlack;
     }
 
     @Override
@@ -473,6 +455,39 @@ public class Board {
 //    }
 
 
+    /**
+     * returns the number of white pieces on the board.
+     */
+    public int getPieceWhite() {
+        return this.pieceWhite;
+    }
+
+    /**
+     * returns the number of black pieces on the board.
+     */
+    public int getPieceBlack() {
+        return pieceBlack;
+    }
+
+    /**
+     * returns the dimension of the board.
+     */
+    public int getBoardLength() {
+        return boardLength;
+    }
+
+    public Piece[][] getBoard() {
+        return board;
+    }
+
+    public int getQueenWhite() {
+        return queenWhite;
+    }
+
+    public int getQueenBlack() {
+        return queenBlack;
+    }
+
     public Player getTurn() {
         return player;
     }
@@ -481,5 +496,4 @@ public class Board {
     public int getPieces() {
         return pieceWhite + pieceBlack;
     }
-
 }

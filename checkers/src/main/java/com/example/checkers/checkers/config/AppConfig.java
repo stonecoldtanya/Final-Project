@@ -26,10 +26,10 @@ public class AppConfig {
         return new BotPlayer(difficulty, 'b');
     }
 
-    @Bean
-    public Piece[][] getStartingState() {
+    @Bean("boarded")
+    public Board getStartingState() {
         Board b = new Board(8);
-        return  b.getBoard();
+        return  b;
     }
 
 }
