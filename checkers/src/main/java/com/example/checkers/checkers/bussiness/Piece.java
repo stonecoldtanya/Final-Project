@@ -4,45 +4,27 @@ import java.awt.*;
 import java.util.Locale;
 
 public class Piece {
-    private Player player;
     private boolean isQueen;
     private String value = null;
     private char colour;
     private Point position = new Point(0, 0);
-
-    public Piece(Player player){
-        this.player = player;
-        this.isQueen = false;
-        setValue(String.valueOf(getColour()));
-        this.value = getValue();
-    }
 
     public Piece(char colour) {
         this.colour = colour;
         this.isQueen = false;
         setValue(String.valueOf(getColour()));
         this.value = getValue();
-
+        this.position = null;
     }
 
     public Piece(char colour, Point position){
         this.colour = colour;
-        this.player = getPlayer();
         this.position = position;
         this.isQueen = false;
         setValue(String.valueOf(getColour()));
         this.value = getValue();
     }
 
-
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
 
     public boolean isQueen() {
         return isQueen;

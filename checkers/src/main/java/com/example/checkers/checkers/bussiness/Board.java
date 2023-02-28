@@ -1,5 +1,8 @@
 package com.example.checkers.checkers.bussiness;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -26,6 +29,9 @@ public class Board {
     private List<Board> children = null;
 
 
+    public Board() {
+    }
+
     /**
      * Instantiates a new Board.
      *
@@ -48,30 +54,51 @@ public class Board {
     public Board(Piece[][] board) {
         this.boardLength = board.length;
         this.board = new Piece[board.length][board.length];
-        this.pieceBlack= 0;
-        this.pieceWhite = 0;
-        this.queenBlack = 0;
-        this.queenWhite = 0;
+        this.pieceBlack= boardLength / 2 * (boardLength / 2 - 1);
+        this.pieceWhite = boardLength / 2 * (boardLength / 2 - 1);
         for (int i = 0; i < board.length; i++) {
             for (int j = (i + 1) % 2; j < board.length; j += 2) {
                 Piece oldPiece = board[i][j];
                 if (oldPiece != null) {
-                    addQueens(oldPiece);
+//                    addQueens(oldPiece);
                     this.board[i][j] = new Piece(oldPiece.getColour());
                 }
             }
             }
     }
 
+    public Board(Piece[][] state, Move originMove) {
+        this.board = deepCopy(state);
+        this.originMove = originMove;
+        this.pieceBlack= boardLength / 2 * (boardLength / 2 - 1);
+        this.pieceWhite = boardLength / 2 * (boardLength / 2 - 1);
+    }
+
     public Board(Board previousState, Move move) {
         this.board = deepCopy(previousState.board);
+        char symbol = move.isBTPlayer() ? player.getColour() : player.getOppositeColour();
+        this.update(move);
+        this.originMove = move;
+    }
 
+    public Board empty() {
+        int n = getBoardLength();
+        Piece[][] emptyState = new Piece[n][n];
+
+        for (Piece[] row : emptyState) {
+            Arrays.fill(row, '-');
+        }
+
+        return new Board(emptyState, null);
+    }
+
+    public Board move(Move move) {
+        return new Board(this, move);
     }
 
     public Piece getPiece(int row, int col) {
         return board[row][col];
     }
-
 
     public Piece[][] deepCopy(Piece[][] original) {
         Piece[][] result = new Piece[boardLength][boardLength];
@@ -98,10 +125,12 @@ public class Board {
         Point current = move.getCurrent();
         Point next = move.getNext();
         Piece moved = stateCopy[move.current.x][move.current.y];
+        moved.setPosition(next);
         if(Math.abs(move.current.x - move.next.x) == 2 || Math.abs(move.current.y - move.next.y) == 2){
             var diffX = (move.next.x - move.current.x) / 2;
             var diffY = (move.next.y - move.current.y) / 2;
             removePiece(stateCopy[move.current.x + diffX][move.current.y + diffY]);
+
             stateCopy[move.current.x + diffX][move.current.y + diffY] = null;
         }
         stateCopy[move.next.x][move.next.y] = moved;
@@ -135,7 +164,7 @@ public class Board {
         return jumpMoves;
 
     }
-    protected List<Move> possibleMoves(Board board, char colour){
+    public List<Move> possibleMoves(Board board, char colour){
         ArrayList<Move> posMoves = new ArrayList<>();
         for (int i = 0; i < boardLength; i++) {
             for (int j = (i + 1) % 2; j < boardLength; j += 2) {
@@ -148,52 +177,84 @@ public class Board {
                             if (board.getPiece(i + 1, j - 1) != null && board.getPiece(i + 1, j - 1).getColour() != colour) {
                                 Point nearLeftJump = new Point(i + 2, j - 2);
                                 if (validate(board, nearLeftJump)){
-                                    posMoves.add(new Move(origin, nearLeftJump, true));
+                                    if (board.getPiece(nearLeftJump.x, nearLeftJump.y) != null){
+                                        System.out.println(MoveComments.NO_FREE_SPACE);
+                                        continue;
+                                    }
+                                    posMoves.add(new Move(origin, nearLeftJump, true, board.isBTPlayer()));
                                 }
                             }else {
-                                posMoves.add(new Move(origin, nearLeft));
+                                if (board.getPiece(nearLeft.x, nearLeft.y) != null){
+                                    System.out.println(MoveComments.NO_FREE_SPACE);
+                                    continue;
+                                }
+                                posMoves.add(new Move(origin, nearLeft, board.isBTPlayer()));
                             }
                         }
                         Point nearRight = new Point(i + 1, j + 1);
                         if (validate(board, nearRight)) {
                             if (board.getPiece(i + 1, j + 1) != null && board.getPiece(i + 1, j + 1).getColour() != colour) {
-                                Point nearLeftJump = new Point(i + 2, j + 2);
-                                if (validate(board, nearLeftJump)){
-                                    posMoves.add(new Move(origin, nearLeftJump, true));
+                                Point nearRightJump = new Point(i + 2, j + 2);
+                                if (validate(board, nearRightJump)){
+                                    if (board.getPiece(nearRightJump.x, nearRightJump.y) != null){
+                                        System.out.println(MoveComments.NO_FREE_SPACE);
+                                        continue;
+                                    }
+                                    posMoves.add(new Move(origin, nearRightJump, true, board.isBTPlayer()));
                                 }
                             }else {
-                                posMoves.add(new Move(origin, nearLeft));
+                                if (board.getPiece(nearRight.x, nearRight.y) != null){
+                                    System.out.println(MoveComments.NO_FREE_SPACE);
+                                    continue;
+                                }
+                                posMoves.add(new Move(origin, nearRight, board.isBTPlayer()));
                             }
                         }
                     }
                     if ((colour == 'w' && piece.getColour() == colour) || (piece.isQueen() && piece.getColour() == colour)){
-                        Point nearLeft = new Point(i - 1, j + 1);
-                        if (validate(board, nearLeft)) {
+                        Point nearRight = new Point(i - 1, j + 1);
+                        if (validate(board, nearRight)) {
                             if (board.getPiece(i - 1, j + 1) != null && board.getPiece(i - 1, j + 1).getColour() != colour) {
-                                Point nearLeftJump = new Point(i - 2, j + 2);
-                                if (validate(board, nearLeftJump)){
-                                    posMoves.add(new Move(origin, nearLeftJump, true));
+                                Point nearRightJump = new Point(i - 2, j + 2);
+                                if (validate(board, nearRightJump)){
+                                    if (board.getPiece(nearRightJump.x, nearRightJump.y) != null){
+                                        System.out.println(MoveComments.NO_FREE_SPACE);
+                                        continue;
+                                    }
+                                    posMoves.add(new Move(origin, nearRightJump, true, !isBTPlayer()));
                                 }
                             }else {
-                                posMoves.add(new Move(origin, nearLeft));
+                                if (board.getPiece(nearRight.x, nearRight.y) != null){
+                                    System.out.println(MoveComments.NO_FREE_SPACE);
+                                    continue;
+                                }
+                                posMoves.add(new Move(origin, nearRight, !isBTPlayer()));
                             }
                         }
-                        Point nearRight = new Point(i - 1, j - 1);
-                        if (validate(board, nearRight)) {
+                        Point nearLeft = new Point(i - 1, j - 1);
+                        if (validate(board, nearLeft)) {
                             if (board.getPiece(i - 1, j - 1) != null && board.getPiece(i - 1, j - 1).getColour() != colour) {
                                 Point nearLeftJump = new Point(i - 2, j - 2);
                                 if (validate(board, nearLeftJump)){
-                                    posMoves.add(new Move(origin, nearLeftJump, true));
+                                    if (board.getPiece(nearLeftJump.x, nearLeftJump.y) != null){
+                                        System.out.println(MoveComments.NO_FREE_SPACE);
+                                        continue;
+                                    }
+                                    posMoves.add(new Move(origin, nearLeftJump, true, !isBTPlayer()));
                                 }
                             }else {
-                                posMoves.add(new Move(origin, nearLeft));
+                                if (board.getPiece(nearLeft.x, nearLeft.y) != null){
+                                    System.out.println(MoveComments.NO_FREE_SPACE);
+                                    continue;
+                                }
+                                posMoves.add(new Move(origin, nearLeft, !isBTPlayer()));
                             }
                         }
                     }
                 }
             }
         }
-        return null;
+        return posMoves;
     }
     public List<Move> getJumps(Board board, char colour){
         List<Move> moves = possibleMoves(board, colour);
@@ -249,7 +310,7 @@ public class Board {
                     this.queenWhite--;
                 }
                 else{
-                    this.pieceWhite++;
+                    this.pieceWhite--;
                 }
             }
             else {
@@ -257,7 +318,7 @@ public class Board {
                     this.queenBlack--;
                 }
                 else{
-                    this.pieceBlack++;
+                    this.pieceBlack--;
                 }
             }
         }
@@ -279,18 +340,18 @@ public class Board {
         for (int i = 0; i < boardLength; i++) {
             for (int j = 0; j < boardLength / 2 - 1; j++) {
                 if (i % 2 == 1 && j % 2 ==0) {
-                    newBoard[j][i] = new Piece('w');
+                    newBoard[j][i] = new Piece('b');
                }
                 else if(i % 2 == 0 && j % 2 ==1){
-                    newBoard[j][i] = new Piece('w');
+                    newBoard[j][i] = new Piece('b');
                 }
                 }
             for (int j = boardLength - 1; j > boardLength / 2; j--) {
                 if (i % 2 == 0 && j % 2 ==1) {
-                    newBoard[j][i] = new Piece('b');
+                    newBoard[j][i] = new Piece('w');
                 }
                 else if(i % 2 == 1 && j % 2 == 0){
-                    newBoard[j][i] = new Piece('b');
+                    newBoard[j][i] = new Piece('w');
                 }
             }
         }
@@ -304,7 +365,7 @@ public class Board {
      * returns the number of white pieces on the board.
      */
     public int getPieceWhite() {
-        return pieceWhite;
+        return this.pieceWhite;
     }
 
     /**
@@ -336,7 +397,6 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder boardString = new StringBuilder();
-        boardString.append("  Let's start the game\n");
         for (int i = 0; i < boardLength; i++) {
             for (int j = 0; j < boardLength; j++) {
                 if (j == 0) {
@@ -366,10 +426,6 @@ public class Board {
         }
         boardString.append(" \n");
         return boardString.toString();
-    }
-
-    public Board move(Move move) {
-        return new Board(this, move);
     }
 
     public Move getOriginMove() {
@@ -421,7 +477,9 @@ public class Board {
         return player;
     }
 
+
     public int getPieces() {
         return pieceWhite + pieceBlack;
     }
+
 }

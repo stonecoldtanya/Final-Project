@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Component("game")
-public class Game {
+@Component
+public class GamePlay {
     private Board b;
     private Player player1;
     private Player player2;
@@ -20,17 +20,15 @@ public class Game {
     private Integer finalScore;
 
     @Autowired
-    public Game(Board startingState) {
-        this.b = startingState;
+    public GamePlay(Piece[][]startingState) {
+        this.b = new Board(startingState);
     }
 
-
-    public Game(Piece[][] b){
-        this( new Board(b));
+    public GamePlay(Board board) {
+        this.b = board;
     }
 
-
-    public Game() {
+    public GamePlay() {
     }
 
     @Autowired
@@ -51,15 +49,12 @@ public class Game {
             return;
         }
 
-
         Player whoseTurn = b.isBTPlayer() ? player1 : player2;
-
         int movesLeft = moves;
 
 
-        while (!b.isFinal() && movesLeft != 0) {
-
-            Move move = whoseTurn.getNextMove(this.b);
+        while (b.isFinal() && movesLeft != 0) {
+            Move move = whoseTurn.getNextMove(b);
             this.move(move);
 
             System.out.printf("%s made a move: %s \n", whoseTurn.getName(), move.toString());
@@ -68,14 +63,27 @@ public class Game {
             movesLeft--;
 
         }
-
-        if (b.isFinal()) {
-
-            finalScore = b.getScore();
-
-
+        if (movesLeft == 0){
+            System.out.printf("Game Over!\n");
+            if (this.b.getPieceWhite() <this.b.getPieceBlack()){
+                Player BTPlayer = b.isBTPlayer() ? player1 : player2;
+                System.out.printf("Our current winner is %s! Well done! \n", BTPlayer.getName());
+            }
+            if (this.b.getPieceBlack() < this.b.getPieceWhite()){
+                Player NotBTPlayer = !b.isBTPlayer() ? player1 : player2;
+                System.out.printf("Our current winner is %s! Well done! \n", NotBTPlayer.getName());
+            }
+            else {
+                System.out.printf("It's a draw! What a shame!");
+            }
             System.out.printf("Game Over!\n");
 
+        }
+
+        if (!b.isFinal()) {
+            finalScore = b.getScore();
+
+            System.out.printf("Game Over!\n");
             System.out.println(b.toString());
 
             if (finalScore == 0) {
@@ -89,7 +97,7 @@ public class Game {
 
 
     public void move(Move move) {
-        this.b = this.b.move(move);
+        this.b = this.b.update(move);
 
     }
 

@@ -26,8 +26,16 @@ public class ConsoleGamer implements Player {
     }
 
     @Override
+    public char getOppositeColour() {
+        if (getColour() == 'b'){
+            return 'w';
+        }
+        return 'b';
+    }
+
+    @Override
     public Move getNextMove(Board state) {
-        System.out.println("Current state is:");
+        System.out.println("Game progress:");
         System.out.println(state.toString());
 
         System.out.println("What is your next move?");
@@ -35,13 +43,12 @@ public class ConsoleGamer implements Player {
 
         int row = input.nextInt();
         int column = input.nextInt();
-        Point current = new Point(row,column);
+        Point current = new Point(row, column);
         int rowNext = input.nextInt();
         int columnNext = input.nextInt();
-        Point next = new Point(rowNext,columnNext);
+        Point next = new Point(rowNext, columnNext);
 
         return new Move(current, next);
-
     }
 
 }

@@ -12,5 +12,6 @@ public interface Player {
 
     public char getColour();
 
+    char getOppositeColour();
 }
 

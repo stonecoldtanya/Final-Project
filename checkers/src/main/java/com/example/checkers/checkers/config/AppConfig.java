@@ -11,11 +11,11 @@ public class AppConfig {
         return Difficulty.HARD;
     }
 
-//    @Bean("name")
-//    public String getPlayerName() {
-//        return "Tanya";
-//    }
-//
+    @Bean("name")
+    public String getPlayerName() {
+        return "Tanya";
+    }
+
 //    @Bean("colour")
 //    public char getColour(){
 //        return 'w';
@@ -26,11 +26,10 @@ public class AppConfig {
         return new BotPlayer(difficulty, 'b');
     }
 
-    @Bean("game")
-    public Board getStartingState() {
+    @Bean
+    public Piece[][] getStartingState() {
         Board b = new Board(8);
-
-        return b;
+        return  b.getBoard();
     }
 
 }

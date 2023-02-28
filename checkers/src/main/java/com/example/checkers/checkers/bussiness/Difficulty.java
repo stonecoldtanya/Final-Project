@@ -3,8 +3,6 @@ package com.example.checkers.checkers.bussiness;
 /**
  * The enum Difficulty.
  */
-//@AllArgsConstructor
-//@Getter
 public enum Difficulty {
     /**
      * Easy difficulty.

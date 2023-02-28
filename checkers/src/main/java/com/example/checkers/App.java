@@ -1,5 +1,5 @@
 package com.example.checkers;
-import com.example.checkers.checkers.bussiness.Game;
+import com.example.checkers.checkers.bussiness.GamePlay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Lazy
 public class App{
-    private final Game game;
+    private final GamePlay game;
 
     @Autowired
-    protected App(Game game) {
+    protected App(GamePlay game) {
         this.game = game;
     }
 

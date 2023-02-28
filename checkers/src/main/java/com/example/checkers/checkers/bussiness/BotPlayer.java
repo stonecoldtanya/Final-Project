@@ -4,7 +4,6 @@ package com.example.checkers.checkers.bussiness;
 
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -41,16 +40,11 @@ public class BotPlayer implements Player {
     }
 
     public BotPlayer(Difficulty difficulty, char b) {
+        this.difficulty = difficulty;
+        this.colour = b;
+        this.depth = difficulty.getDepthDifficulty();
     }
 
-    /**
-     * Instantiates a new Bot player.
-     *
-     * @param depth  the depth
-     */
-    public BotPlayer(int depth, char colour) {
-        colour = colour;
-    }
 
     /**
      * Instantiates a new Bot player.
@@ -67,12 +61,20 @@ public class BotPlayer implements Player {
     }
 
     public Move getNextMove(Board board) {
-        return null;
+        return getNextMove(board, board.possibleMoves(board, colour), colour);
     }
 
 
     public char getColour() {
         return this.colour;
+    }
+
+    @Override
+    public char getOppositeColour() {
+        if (getColour() == 'b'){
+            return 'w';
+        }
+        return 'b';
     }
 
     public Move getNextMove(Board board, List<Move> moves, char color) {
@@ -90,23 +92,23 @@ public class BotPlayer implements Player {
         if (moves.size() == 1){
             return moves.get(0);
         }
-        int bestScore = Integer.MIN_VALUE;
-        List<Move> equalBests = new ArrayList<>();
-        for (Move succ : moves){
-            int val = minimax(board, this.depth);
-            if (val > bestScore){
-                bestScore = val;
-                equalBests.clear();
+        int highest = Integer.MIN_VALUE;
+        List<Move> equal = new ArrayList<>();
+        for (Move move : moves){
+            int value = minimax(board, this.depth);
+            if (value > highest){
+                highest = value;
+                equal.clear();
             }
-            if (val == bestScore){
-                equalBests.add(succ);
+            if (value == highest){
+                equal.add(move);
             }
         }
-        if(equalBests.size() > 1){
-            System.out.println(player.toString() + " choosing random best move");
+        if(equal.size() > 1){
+            System.out.println("Random best move incoming!");
         }
-        // choose randomly from equally scoring best moves
-        return findRandomMove(equalBests);
+        // will choose a random move from the list
+        return findRandomMove(equal);
     }
 
     private Move findRandomMove(List<Move> moves){
@@ -117,56 +119,50 @@ public class BotPlayer implements Player {
         int i = rand.nextInt(moves.size());
         return moves.get(i);
     }
-    private int minimax(Board node, int depth){
-        // initialize alpha (computed as a max)
+    private int minimax(Board boardState, int depth){
         int alpha = Integer.MIN_VALUE;
-        // initialize beta (computed as a min)
         int beta = Integer.MAX_VALUE;
-        // call minimax
-        return minimax(node, depth, alpha, beta);
+        
+        return minimax(boardState, depth, alpha, beta);
     }
-    private int minimax(Board node, int depth, int alpha, int beta){
-        if (depth == 0 || node.isFinal()){
-            return complexHeuristic(node);
+    private int minimax(Board boardState, int depth, int alpha, int beta){
+        if (depth == 0 || boardState.isFinal()){
+            return complexHeuristic(boardState);
         }
         // MAX player = player
-        if (node.getTurn().getName() == player){
-            // player tries to maximize this value
-            int v = Integer.MIN_VALUE;
-            for (Move move: node.possibleMoves(node, getColour())){
-                node.update(move);
-                v = Math.max(v, minimax(node, depth-1, alpha, beta));
-                alpha = Math.max(alpha, v);
+        if (boardState.isBTPlayer()){
+            int value = Integer.MIN_VALUE;
+            for (Move move: boardState.possibleMoves(boardState, getColour())){
+                boardState.update(move);
+                value = Math.max(value, minimax(boardState, depth-1, alpha, beta));
+                alpha = Math.max(alpha, value);
                 // prune
                 if (alpha >= beta){
                     break;
                 }
             }
-            return v;
+            return value;
         }
         // MIN player = opponent
-        if (node.getTurn().getName() != player){
-            // opponent tries to minimize this value
-            int v = Integer.MAX_VALUE;
-            for (Move move: node.possibleMoves(node, getColour())){
-                node.update(move);
-                v = Math.min(v,minimax(node, depth-1, alpha, beta));
-                beta = Math.min(beta, v);
+        if (!boardState.isBTPlayer()){
+            int value = Integer.MAX_VALUE;
+            for (Move move: boardState.possibleMoves(boardState, getColour())){
+                boardState.update(move);
+                value = Math.min(value,minimax(boardState, depth-1, alpha, beta));
+                beta = Math.min(beta, value);
                 // prune
                 if (alpha >= beta){
                     break;
                 }
             }
-            return v;
+            return value;
         }
         throw new RuntimeException("Error in minimax algorithm");
     }
-
-
-
+    
 
     private static int heuristic(Board board) {
-        // +2 for pawn, +4 for king
+        // +2 for a regular piece, +4 for queens
         int black = (board.getPieceBlack() + board.getQueenBlack()) * 2;
         int white = (board.getPieceWhite() + board.getQueenWhite()) * 2;
 
@@ -216,6 +212,5 @@ public class BotPlayer implements Player {
             trade = startingCount + board.getPieces();
         }
         return (int) ((whitePieces-blackPieces) + (queenFactor * (whiteQueens-blackQueens)) + (cellFactor * (whiteCellWeight-blackCellWeight)) * 1000) + trade;
-
     }
     }

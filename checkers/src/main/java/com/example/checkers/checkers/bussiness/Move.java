@@ -13,6 +13,13 @@ public class Move {
     public boolean queenPiece;
     private boolean jumpMove;
 
+    public Move(Point current, Point next, boolean isBTPlayer) {
+        this.isBTPlayer = isBTPlayer;
+        this.current = current;
+        this.next = next;
+    }
+
+
     public Move(Point current, Point next) {
         this.current = current;
         this.next = next;
@@ -25,10 +32,11 @@ public class Move {
 //        }
     }
 
-    public Move(Point current, Point next, boolean jumpMove) {
+    public Move(Point current, Point next, boolean jumpMove, boolean isBTPlayer) {
         this.current = current;
         this.next = next;
         this.jumpMove = jumpMove;
+        this.isBTPlayer = isBTPlayer;
     }
 
     public Point getCurrent() {
@@ -76,18 +84,16 @@ public class Move {
         return Objects.hash(this.getCurrent(), this.getNext());
     }
 
-//    public String toString() {
-//        String format = String.format("%s moves to [%d, %d]", isBTPlayer ? "Black Tile Player" : "White Tile Player", next.getX(), next.getY());
-//        return format;
-//    }
-
-
     @Override
     public String toString() {
-        return "Move{" +
-                "current=" + current +
-                ", next=" + next +
-                '}';
+        return "Move{ " +
+                "[" + current.x + ", " + current.y +
+                "], [" + next.x + ", " + next.y +
+                "] }";
+    }
+
+    public boolean isValid() {
+        return true;
     }
 }
 

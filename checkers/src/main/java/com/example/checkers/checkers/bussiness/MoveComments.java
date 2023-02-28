@@ -1,15 +1,11 @@
 package com.example.checkers.checkers.bussiness;
 
 public enum MoveComments {
-    NOT_DIAGONAL ("You can only move diagonally."),
-    FORCED_JUMP ("You're forced to take."),
-    NO_FREE_SPACE ("You can't move onto another piece."),
-    ONLY_SINGLE_DIAGONALS ("You can only make single moves."),
-    NO_BACKWARD_MOVES_FOR_SINGLES ("Only kings can move backwards!"),
-    NOT_ON_BOARD(""),
-    PIECE_BLOCKED ("This piece has no diagonal moves."),
-    UNKNOWN_INVALID("Not a valid move."),
-    SUCCESS ("Success");
+    OUT_OF_BOUNDS("This board is too small for you, isn't it?"),
+    NOT_DIAGONAL ("Are you sure? Only diagonal moves, please!"),
+    DOUBLE_JUMP ("Forced jump! DOUBLE TROUBLE!"),
+    NO_FREE_SPACE ("That space is not free, lad."),
+    NORMAL_PIECE ("Oh, silly, you are not a queen piece!");
 
     private final String name;
 
