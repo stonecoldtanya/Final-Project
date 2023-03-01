@@ -5,7 +5,7 @@ import com.example.checkers.checkers.bussiness.Piece;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "board_states")
+@Table(name = "states")
 public class BoardState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
