@@ -2,6 +2,8 @@ package com.example.checkers.checkers.models.entities;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "games")
@@ -20,7 +22,7 @@ public class Game {
 //    private Player bot;
 
     @OneToMany
-    private List<BoardState> states;
+    private Set<BoardState> states;
 
     public Game(int result, Contestant contestant) {
         this.result = result;
@@ -54,4 +56,24 @@ public class Game {
         this.contestant = contestant;
     }
 
+    public Set<BoardState> getStates() {
+        return states;
+    }
+
+    public void setStates(Set<BoardState> states) {
+        this.states = states;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return id == game.id && result == game.result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, result);
+    }
 }

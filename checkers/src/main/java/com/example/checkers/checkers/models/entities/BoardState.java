@@ -3,6 +3,7 @@ package com.example.checkers.checkers.models.entities;
 import com.example.checkers.checkers.bussiness.Piece;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "states")
@@ -34,5 +35,18 @@ public class BoardState {
 
     public void setCurrentState(Piece[][] currentState) {
         this.currentState = currentState;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoardState that = (BoardState) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
