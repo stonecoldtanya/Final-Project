@@ -1,15 +1,15 @@
 package com.example.checkers.checkers.models.entities;
 
+import com.example.checkers.checkers.bussiness.Board;
 import com.example.checkers.checkers.bussiness.Player;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name  = "contestants")
-public class Contestant {
+public class Contestant implements Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -17,15 +17,18 @@ public class Contestant {
     @Column(nullable = false)
     private String name;
 
-    private boolean isWinner;
+    private char color;
+
 
     @OneToMany
     private Set<Game> games;
 
-//    @OneToMany
-//    private Tournament tournament;
-
     public Contestant() {
+    }
+
+    public Contestant(String name, char color) {
+        this.name = name;
+        this.color = color;
     }
 
     public long getId() {
@@ -40,16 +43,29 @@ public class Contestant {
         return name;
     }
 
+    @Override
+    public Move getNextMove(Board board) {
+        return null;
+    }
+
+    @Override
+    public char getColour() {
+        return color;
+    }
+
+    @Override
+    public char getOppositeColour() {
+        if (getColour() == 'b'){
+            return 'w';
+        }
+        else {
+            return 'b';
+        }
+
+    }
+
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isWinner() {
-        return isWinner;
-    }
-
-    public void setWinner(boolean winner) {
-        isWinner = winner;
     }
 
     public Set<Game> getGames() {

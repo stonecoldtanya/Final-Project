@@ -2,16 +2,20 @@ package com.example.checkers.checkers.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
-@Controller
+@RestController
 //@EnableAutoConfiguration
-//@RequestMapping("/home")
+@RequestMapping("/home")
 public class HomeController {
-
-//    @RequestMapping("/home")
-    @GetMapping("/home")
-    @ResponseBody
-    public String greeting() {
-        return  "Hello, gamer";
+    @GetMapping("")
+    public String home() {
+        return "welcome";
     }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public String redirect() {
+        return "redirect:/";
+    }
+
 }

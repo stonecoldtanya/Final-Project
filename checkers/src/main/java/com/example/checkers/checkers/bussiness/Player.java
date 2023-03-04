@@ -1,8 +1,6 @@
 package com.example.checkers.checkers.bussiness;
 
-import com.example.checkers.checkers.bussiness.Board;
-import com.example.checkers.checkers.bussiness.Move;
-import org.springframework.stereotype.Component;
+import com.example.checkers.checkers.models.entities.Move;
 
 public interface Player {
 

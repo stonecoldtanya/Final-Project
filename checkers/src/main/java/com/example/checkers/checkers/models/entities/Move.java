@@ -1,14 +1,20 @@
-package com.example.checkers.checkers.bussiness;
+package com.example.checkers.checkers.models.entities;
 
 
+import javax.persistence.*;
 import java.awt.*;
 import java.util.Objects;
 
-//@Immutable
+@Entity
+@Table(name = "moves")
 public class Move {
-    private boolean isBTPlayer;
-    final Point current;
-    final Point next;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    public boolean isBTPlayer;
+    public Point current;
+    public Point next;
 
     public boolean queenPiece;
     private boolean jumpMove;

@@ -16,14 +16,9 @@ public class AppConfig {
         return "Tanya";
     }
 
-//    @Bean("colour")
-//    public char getColour(){
-//        return 'w';
-//    }
-
     @Bean("bot")
     public Player getBot(Difficulty difficulty, char b) {
-        return new BotPlayer(difficulty, 'b');
+        return new BotPlayer(getPlayerName(), difficulty, 'b');
     }
 
     @Bean("boarded")

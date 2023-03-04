@@ -1,9 +1,9 @@
 package com.example.checkers.checkers.bussiness;
 
 
+import com.example.checkers.checkers.models.entities.Move;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
@@ -31,17 +31,17 @@ public class GamePlay {
     public GamePlay() {
     }
 
-    @Autowired
-    @Qualifier("consoleGamer")
-    public void setPlayer1(Player player1) {
-        this.player1 = player1;
-    }
-
-    @Autowired
-    @Qualifier("bot")
-    public void setPlayer2(Player player2) {
-        this.player2 = player2;
-    }
+//    @Autowired
+//    @Qualifier("consoleGamer")
+//    public void setPlayer1(Player player1) {
+//        this.player1 = player1;
+//    }
+//
+//    @Autowired
+//    @Qualifier("bot")
+//    public void setPlayer2(Player player2) {
+//        this.player2 = player2;
+//    }
 
     public void play(int moves){
         if (player1 == null || player2 == null) {
@@ -93,6 +93,22 @@ public class GamePlay {
     public void move(Move move) {
         this.b = this.b.update(move);
 
+    }
+
+    public Board getB() {
+        return b;
+    }
+
+    public void setB(Board b) {
+        this.b = b;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
     }
 
     @Autowired

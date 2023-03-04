@@ -1,6 +1,8 @@
 package com.example.checkers.checkers.bussiness;
 
 import java.awt.*;
+
+import com.example.checkers.checkers.models.entities.Move;
 import org.springframework.stereotype.Component;
 import java.util.Scanner;
 

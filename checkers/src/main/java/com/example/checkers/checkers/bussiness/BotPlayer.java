@@ -2,6 +2,7 @@ package com.example.checkers.checkers.bussiness;
 
 
 
+import com.example.checkers.checkers.models.entities.Move;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -14,7 +15,7 @@ import java.util.List;
 public class BotPlayer implements Player {
     private char colour;
     private int depth;
-    private String player;
+    private String name;
     private Difficulty difficulty;
     private static final int[][] weightEightXEight = {{0, 4, 0, 4, 0, 4, 0, 4},
                                                      {4, 0, 3, 0, 3, 0, 3, 0},
@@ -39,10 +40,11 @@ public class BotPlayer implements Player {
     public BotPlayer() {
     }
 
-    public BotPlayer(Difficulty difficulty, char b) {
+    public BotPlayer(String name, Difficulty difficulty, char colour) {
         this.difficulty = difficulty;
-        this.colour = b;
+        this.colour = colour;
         this.depth = difficulty.getDepthDifficulty();
+        this.name = name;
     }
 
 
@@ -53,7 +55,7 @@ public class BotPlayer implements Player {
      */
     public BotPlayer(Difficulty difficulty) {
         depth = this.difficulty.getDepthDifficulty();
-        player = getName();
+        name  = getName();
     }
 
     public String getName() {
@@ -65,8 +67,9 @@ public class BotPlayer implements Player {
     }
 
 
+    @Override
     public char getColour() {
-        return this.colour;
+       return this.colour;
     }
 
     @Override
@@ -76,6 +79,11 @@ public class BotPlayer implements Player {
         }
         return 'b';
     }
+
+    public void setColour(char colour) {
+        this.colour = colour;
+    }
+
 
     public Move getNextMove(Board board, List<Move> moves, char color) {
         Move bestMove;

@@ -1,10 +1,9 @@
 package com.example.checkers.checkers.bussiness;
 
-import org.springframework.context.annotation.Bean;
+import com.example.checkers.checkers.models.entities.Move;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
