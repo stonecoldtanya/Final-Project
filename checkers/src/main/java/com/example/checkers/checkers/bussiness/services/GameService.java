@@ -30,6 +30,16 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
+    public Game createGame(Contestant player, Difficulty difficulty) {
+        Game game = new Game();
+        game.setId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+        game.setContestant(player);
+        game.setDifficulty(difficulty);
+//        game.setStatus(GameStatusEnum.NEW);
+        gameRepository.save(game);
+        return game;
+    }
+
     public void updateState(Move move, Player player) {
         if (board.getPiece((int) move.next.getX(), (int)  move.next.getY()) != null) {
             throw new IllegalMoveException(MoveComments.NO_FREE_SPACE);
@@ -39,8 +49,6 @@ public class GameService {
 
     public Game newGame(Contestant player, Difficulty difficulty) {
         Game game = new Game(player, difficulty);
-        game.setId((UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE));
-////        game.setContestant(game.getContestant());
 //        game.setStatus(GameStatusEnum.NEW);
 ////        game.setDifficulty(game.getDifficulty());
         gameRepository.save(game);
@@ -48,10 +56,12 @@ public class GameService {
     }
 
     public Game createGame(Game game){
-    Optional<Game> existingGame = gameRepository.findOne(Example.of(game));
-        if (existingGame.isPresent()) {
-            return existingGame.get();
-         }
+//    Optional<Game> existingGame = gameRepository.findOne(Example.of(game));
+//        if (existingGame.isPresent()) {
+//            return existingGame.get();
+//         }
+//        game.setContestant(game.getContestant());
+//        game.setDifficulty(game.getDifficulty());
 
         return gameRepository.save(game);
 
@@ -64,7 +74,6 @@ public class GameService {
     public Optional<GameDTO> findGameById(Long id) {
         Optional<Game> game = gameRepository.findById(id);
         return game.map(GameDTO::fromEntity);
-
     }
 
     public Board intBoard(int length) {

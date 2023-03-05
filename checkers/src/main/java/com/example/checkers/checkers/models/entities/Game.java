@@ -1,5 +1,6 @@
 package com.example.checkers.checkers.models.entities;
 
+import com.example.checkers.checkers.bussiness.BotPlayer;
 import com.example.checkers.checkers.bussiness.Difficulty;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private GameStatusEnum status;
+//    private GameStatusEnum status;
 
     @Column(nullable = false)
     private int result;
@@ -24,9 +25,6 @@ public class Game {
 
     @ManyToOne
     private Contestant contestant;
-
-//    @Column(nullable = false)
-//    private Player bot;
 
     @OneToMany
     private List<Move> moves;
@@ -37,13 +35,22 @@ public class Game {
     public Game(Contestant contestant, Difficulty difficulty) {
         this.contestant = contestant;
         this.difficulty = difficulty;
-        this.result = 0;
-        this.status = null;
-        this.moves = new ArrayList<>();
-        this.states = new ArrayList<>();
+    }
+
+    public Game(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 
     public Game() {
+    }
+
+    public Game(long id, int result, Difficulty difficulty, Contestant contestant, List<Move> moves, List<BoardState> states) {
+        this.id = id;
+        this.result = result;
+        this.difficulty = difficulty;
+        this.contestant = contestant;
+        this.moves = moves;
+        this.states = states;
     }
 
     public long getId() {
@@ -60,6 +67,14 @@ public class Game {
 
     public void setResult(int result) {
         this.result = result;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 
     public Contestant getContestant() {
@@ -84,22 +99,6 @@ public class Game {
 
     public void setStates(List<BoardState> states) {
         this.states = states;
-    }
-
-    public GameStatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(GameStatusEnum status) {
-        this.status = status;
-    }
-
-    public Difficulty getDifficulty() {
-        return difficulty;
-    }
-
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
     }
 
     @Override

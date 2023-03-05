@@ -20,8 +20,8 @@ public class Contestant implements Player {
     private char color;
 
 
-    @OneToMany
-    private Set<Game> games;
+//    @OneToMany
+//    private Set<Game> games;
 
     public Contestant() {
     }
@@ -37,6 +37,14 @@ public class Contestant implements Player {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public char getColor() {
+        return color;
+    }
+
+    public void setColor(char color) {
+        this.color = color;
     }
 
     public String getName() {
@@ -63,17 +71,8 @@ public class Contestant implements Player {
         }
 
     }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<Game> getGames() {
-        return games;
-    }
-
-    public void setGames(Set<Game> games) {
-        this.games = games;
     }
 
     @Override
@@ -81,11 +80,11 @@ public class Contestant implements Player {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contestant that = (Contestant) o;
-        return id == that.id && name.equals(that.name);
+        return  name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(name);
     }
 }

@@ -24,8 +24,14 @@ public class GameDTO {
     public GameDTO(long id, List<BoardState> states) {
     }
 
+    public GameDTO(Long id, @NonNull Contestant contestant, Difficulty difficulty) {
+        this.id = id;
+        this.contestant = contestant;
+        this.difficulty = difficulty;
+    }
+
     public static GameDTO fromEntity(Game entity) {
-        return new GameDTO(entity.getId(), entity.getStates());
+        return new GameDTO(entity.getId(), entity.getContestant(), entity.getDifficulty());
     }
 
 
@@ -53,5 +59,12 @@ public class GameDTO {
         this.difficulty = difficulty;
     }
 
-
+    @Override
+    public String toString() {
+        return "GameDTO{" +
+                "id=" + id +
+                ", contestant=" + contestant +
+                ", difficulty=" + difficulty +
+                '}';
+    }
 }

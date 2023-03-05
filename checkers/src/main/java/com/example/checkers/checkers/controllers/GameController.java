@@ -1,6 +1,5 @@
 package com.example.checkers.checkers.controllers;
 
-import com.example.checkers.checkers.bussiness.Difficulty;
 import com.example.checkers.checkers.bussiness.Player;
 import com.example.checkers.checkers.bussiness.services.ContestantService;
 import com.example.checkers.checkers.bussiness.services.GameService;
@@ -9,6 +8,7 @@ import com.example.checkers.checkers.models.dto.MoveDTO;
 import com.example.checkers.checkers.models.entities.Contestant;
 import com.example.checkers.checkers.models.entities.Game;
 import com.example.checkers.checkers.models.entities.Move;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -35,42 +35,51 @@ public class GameController {
         return playersService.getPlayers();
     }
 
-    @GetMapping("/games")
+    @GetMapping
     public List<GameDTO> getGames() {
         return this.gameService.getAllGames();
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    public @ResponseBody GameDTO getLevelById(@PathVariable Long id) {
+    public @ResponseBody GameDTO getGameById(@PathVariable @NotNull Long id) {
         if (id == null) {
             new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request, id can not be null");
         }
         Optional<GameDTO> result = this.gameService.findGameById(id);
 
-        return result.orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Game with this id cannot be found!"
-        ));
+        if (result.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not found");
+        } else {
+            return result.get();
+        }
     }
 
     @GetMapping("/board")
     public String getInitBoard() {
         return gameService.board.toString();
     }
+
     @PostMapping("/board")
     public void add(@RequestParam int length){
         this.gameService.intBoard(length);
     }
 
-    @PostMapping("/games")
-//    @RequestMapping(method = RequestMethod.POST, value = "")
-    public void add(@RequestBody Contestant player, Difficulty difficulty){
-//        Game game = new Game(player, difficulty);
-        this.gameService.newGame(player, difficulty);
-    }
-//    public ResponseEntity<Game> create(@RequestBody Contestant player, Difficulty difficulty) {
-////        log.info("create game request: {}");
-//        return ResponseEntity.ok(gameStateService.newGame(player, difficulty));
+//    @PostMapping("/games")
+////    @RequestMapping(method = RequestMethod.POST, value = "")
+//    public void add(@RequestBody Contestant player, Difficulty difficulty){
+////        Game game = new Game(player, difficulty);
+//        this.gameService.createGame(player,difficulty);
 //    }
+////    public ResponseEntity<Game> create(@RequestBody Contestant player, Difficulty difficulty) {
+//////        log.info("create game request: {}");
+////        return ResponseEntity.ok(gameStateService.newGame(player, difficulty));
+////    }
+    @PostMapping
+    public @ResponseBody
+    Game createGame(@RequestBody Game game) {
+        game.setContestant((Contestant) playersService.getPlayers().get(1));
+        return this.gameService.createGame(game);
+    }
 
     @PostMapping("/move")
     public List<Move> move(@Valid @RequestBody MoveDTO request){
