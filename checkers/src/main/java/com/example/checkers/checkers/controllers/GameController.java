@@ -40,6 +40,7 @@ public class GameController {
         return this.gameService.getAllGames();
     }
 
+
     @GetMapping(value = "/{id}", produces = "application/json")
     public @ResponseBody GameDTO getGameById(@PathVariable @NotNull Long id) {
         if (id == null) {
@@ -64,30 +65,24 @@ public class GameController {
         this.gameService.intBoard(length);
     }
 
-//    @PostMapping("/games")
-////    @RequestMapping(method = RequestMethod.POST, value = "")
-//    public void add(@RequestBody Contestant player, Difficulty difficulty){
-////        Game game = new Game(player, difficulty);
-//        this.gameService.createGame(player,difficulty);
-//    }
-////    public ResponseEntity<Game> create(@RequestBody Contestant player, Difficulty difficulty) {
-//////        log.info("create game request: {}");
-////        return ResponseEntity.ok(gameStateService.newGame(player, difficulty));
-////    }
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public @ResponseBody
-    Game createGame(@RequestBody Game game) {
-        game.setContestant((Contestant) playersService.getPlayers().get(1));
-        return this.gameService.createGame(game);
+    public @ResponseBody GameDTO createGame(@RequestBody GameDTO game) {
+//        game.setContestant(game.getContestant());
+        return gameService.createGame(game);
     }
 
     @PostMapping("/move")
-    public List<Move> move(@Valid @RequestBody MoveDTO request){
-//        Game game = getGame();
+    public List<Move> move(@Valid @RequestBody MoveDTO request, Game game){
 //        MoveDTO result = game.move(request);
 //        moveAi(game);
         return null;
     }
+
+//    @PostMapping("/connect")
+//    public @ResponseBody GameDTO connect(@RequestBody GameDTO game){
+//        return gameService.connectToGame(game.getId());
+//    }
 
 
 //    @PostMapping("/turn")

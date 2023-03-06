@@ -1,7 +1,11 @@
 package com.example.checkers.checkers.models.entities;
 
+import com.example.checkers.checkers.bussiness.Board;
 import com.example.checkers.checkers.bussiness.BotPlayer;
 import com.example.checkers.checkers.bussiness.Difficulty;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -24,6 +28,8 @@ public class Game {
     private Difficulty difficulty;
 
     @ManyToOne
+    @Cascade(CascadeType.ALL)
+    @JoinColumn(name = "contestant_id")
     private Contestant contestant;
 
     @OneToMany

@@ -1,13 +1,10 @@
 package com.example.checkers.checkers.bussiness.services;
 
-import com.example.checkers.checkers.bussiness.Board;
-import com.example.checkers.checkers.bussiness.Difficulty;
-import com.example.checkers.checkers.bussiness.MoveComments;
+import com.example.checkers.checkers.bussiness.*;
 import com.example.checkers.checkers.bussiness.repositories.BoardStateRepository;
 import com.example.checkers.checkers.exceptions.IllegalMoveException;
 import com.example.checkers.checkers.models.entities.*;
 import com.example.checkers.checkers.models.dto.GameDTO;
-import com.example.checkers.checkers.bussiness.Player;
 import com.example.checkers.checkers.bussiness.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -30,15 +27,20 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public Game createGame(Contestant player, Difficulty difficulty) {
-        Game game = new Game();
-        game.setId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
-        game.setContestant(player);
-        game.setDifficulty(difficulty);
-//        game.setStatus(GameStatusEnum.NEW);
-        gameRepository.save(game);
-        return game;
+    public Game createGame(Game game) {
+        Optional<Game> existingGame = gameRepository.findOne(Example.of(game));
+        if (existingGame.isPresent()) {
+            return existingGame.get();
+        }
+
+        return gameRepository.save(game);
     }
+
+    public GameDTO createGame(GameDTO game){
+        Game newGame = GameDTO.updateEntity(new Game(), game);
+        Game result = createGame(newGame);
+        return GameDTO.fromEntity(result);
+}
 
     public void updateState(Move move, Player player) {
         if (board.getPiece((int) move.next.getX(), (int)  move.next.getY()) != null) {
@@ -46,26 +48,6 @@ public class GameService {
         }
         board.update(move);
     }
-
-    public Game newGame(Contestant player, Difficulty difficulty) {
-        Game game = new Game(player, difficulty);
-//        game.setStatus(GameStatusEnum.NEW);
-////        game.setDifficulty(game.getDifficulty());
-        gameRepository.save(game);
-        return game;
-    }
-
-    public Game createGame(Game game){
-//    Optional<Game> existingGame = gameRepository.findOne(Example.of(game));
-//        if (existingGame.isPresent()) {
-//            return existingGame.get();
-//         }
-//        game.setContestant(game.getContestant());
-//        game.setDifficulty(game.getDifficulty());
-
-        return gameRepository.save(game);
-
-}
 
     public List<GameDTO> getAllGames() {
         return gameRepository.findAll().stream().map(GameDTO::fromEntity).collect(Collectors.toList());
@@ -80,4 +62,18 @@ public class GameService {
         Board b = new Board(length);
         return b;
     }
+
+//    public Game connectToGame(Long gameId) {
+//        Optional<Game> optionalGame = gameRepository.findById(gameId);
+//
+//        Game game = optionalGame.get();
+//
+//        if (game.getSecondPlayer() != null) {
+//            throw new NullPointerException("u might need a bot!");
+//        }
+//
+//        game.setSecondPlayer(new BotPlayer(game.getDifficulty()));
+//        gameRepository.save(game);
+//        return game;
+//    }
 }

@@ -13,18 +13,17 @@ import java.util.List;
 public class GameDTO {
     private Long id;
 
-    @NonNull
     private Contestant contestant;
 
-    @NotEmpty
     private Difficulty difficulty;
 
     private List<BoardState> states;
 
-    public GameDTO(long id, List<BoardState> states) {
+    public GameDTO() {
     }
 
-    public GameDTO(Long id, @NonNull Contestant contestant, Difficulty difficulty) {
+
+    public GameDTO(Long id, Contestant contestant, Difficulty difficulty) {
         this.id = id;
         this.contestant = contestant;
         this.difficulty = difficulty;
@@ -33,6 +32,15 @@ public class GameDTO {
     public static GameDTO fromEntity(Game entity) {
         return new GameDTO(entity.getId(), entity.getContestant(), entity.getDifficulty());
     }
+
+    public static Game updateEntity(Game game, GameDTO dto) {
+        // don't change the id
+        game.setContestant(dto.getContestant());
+        game.setDifficulty(dto.getDifficulty());
+
+        return game;
+    }
+
 
 
     public Long getId() {
@@ -59,12 +67,12 @@ public class GameDTO {
         this.difficulty = difficulty;
     }
 
-    @Override
-    public String toString() {
-        return "GameDTO{" +
-                "id=" + id +
-                ", contestant=" + contestant +
-                ", difficulty=" + difficulty +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "GameDTO{" +
+//                "id=" + id +
+//                ", contestant=" + contestant +
+//                ", difficulty=" + difficulty +
+//                '}';
+//    }
 }

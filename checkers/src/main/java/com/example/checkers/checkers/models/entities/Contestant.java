@@ -2,8 +2,10 @@ package com.example.checkers.checkers.models.entities;
 
 import com.example.checkers.checkers.bussiness.Board;
 import com.example.checkers.checkers.bussiness.Player;
-
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,14 +16,13 @@ public class Contestant implements Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     private char color;
 
-
-//    @OneToMany
-//    private Set<Game> games;
+//    @OneToMany(mappedBy = "contestant")
+//    private Set<Game> games = new HashSet<>();
 
     public Contestant() {
     }
