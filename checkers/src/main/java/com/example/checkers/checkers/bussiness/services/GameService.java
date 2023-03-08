@@ -30,16 +30,17 @@ public class GameService {
         if (existingGame.isPresent()) {
             return existingGame.get();
         }
-
+        bsRepo.save(game.getCurrent());
         return gameRepository.save(game);
     }
 
     public GameDTO createGame(GameDTO game){
         Game newGame = GameDTO.updateEntity(new Game(), game);
+        if (game.getCurrent().getCurrentState() == null){
+            boardService.init(8, game.getCurrent());
+            game.setCurrent(boardService.init(8, game.getCurrent()));
+        }
         Game result = createGame(newGame);
-//        if (result.getCurrent().getCurrentState() == null){
-//            result.setCurrent(boardService.init(8));
-//        }
         return GameDTO.fromEntity(result);
     }
 

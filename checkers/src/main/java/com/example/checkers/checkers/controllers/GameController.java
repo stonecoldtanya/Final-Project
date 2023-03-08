@@ -1,11 +1,12 @@
 package com.example.checkers.checkers.controllers;
 
-import com.example.checkers.checkers.bussiness.Player;
 import com.example.checkers.checkers.bussiness.services.BoardService;
 import com.example.checkers.checkers.bussiness.services.ContestantService;
 import com.example.checkers.checkers.bussiness.services.GameService;
+import com.example.checkers.checkers.models.dto.BoardStateDTO;
 import com.example.checkers.checkers.models.dto.GameDTO;
 import com.example.checkers.checkers.models.dto.MoveDTO;
+import com.example.checkers.checkers.models.entities.Contestant;
 import com.example.checkers.checkers.models.entities.Game;
 import com.example.checkers.checkers.models.entities.Move;
 import com.sun.istack.NotNull;
@@ -31,9 +32,14 @@ public class GameController {
         this.boardService = boardService;
     }
 
-    @GetMapping("/players")
-    public List<Player> getPlayers(@RequestParam(value = "id", defaultValue = "") String id) {
-        return playersService.getPlayers();
+    @GetMapping(value = "/{id}/player", produces = "application/json")
+    public @ResponseBody Contestant getPlayer(@PathVariable @NotNull Long id) {
+        Optional<GameDTO> result = this.gameService.findGameById(id);
+        if (result.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not found");
+        } else {
+            return result.get().getContestant();
+        }
     }
 
     @GetMapping
@@ -57,8 +63,7 @@ public class GameController {
     }
 
     @GetMapping(value = "/{id}/state", produces = "application/json")
-    public @ResponseBody
-    String getGameState(@PathVariable @NotNull Long id) {
+    public @ResponseBody BoardStateDTO getGameState(@PathVariable @NotNull Long id) {
         if (id == null) {
             new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request, id can not be null");
         }
@@ -66,19 +71,21 @@ public class GameController {
         if (result.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not found");
         } else {
-            return result.get().getCurrent().toString();
+            return BoardStateDTO.fromEntity(result.get().getCurrent());
         }
     }
 
-    @GetMapping("/board")
-    public String getInitBoard(@RequestParam int length) {
-        return boardService.init(length).toString();
+    @GetMapping(value = "/{id}/board", produces = "application/json")
+    public String getBoardState(@PathVariable @NotNull Long id) {
+        if (id == null) {
+            new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request, id can not be null");
+        }
+        Optional<BoardStateDTO> result = this.boardService.findBoardById(id);
+
+        return result.get().toString();
+
     }
 
-    @PostMapping("/board")
-    public void add(@RequestParam int length){
-        this.boardService.init(length);
-    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping

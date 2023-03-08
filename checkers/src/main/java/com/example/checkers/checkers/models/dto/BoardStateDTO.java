@@ -41,4 +41,38 @@ public class BoardStateDTO {
     public void setCurrentState(Piece[][] currentState) {
         this.currentState = currentState;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder boardString = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (j == 0) {
+                    if(i < 9){
+                        boardString.append(0).append(i + 1).append("  ");
+                    }else {
+                        boardString.append(i + 1).append("  ");
+                    }
+                }
+                Piece piece = currentState[i][j];
+                if (piece == null) {
+                    boardString.append('-');
+                } else {
+                    if (piece.isQueen()) {
+                        boardString.append(Character.toUpperCase(piece.getColour()));
+                    } else {
+                        boardString.append(piece.getColour());
+                    }
+                }
+                boardString.append(" ");
+            }
+            if(i < 9){
+                boardString.append(" " + 0).append(i + 1).append("\n");
+            }else {
+                boardString.append(" ").append(i + 1).append("\n");
+            }
+        }
+        boardString.append(" \n");
+        return boardString.toString();
+    }
 }

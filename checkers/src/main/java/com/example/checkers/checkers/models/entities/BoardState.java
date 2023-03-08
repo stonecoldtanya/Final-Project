@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "states")
-public class BoardState extends Board {
+public class BoardState{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -47,12 +47,12 @@ public class BoardState extends Board {
         this.currentState = currentState;
     }
 
-    public BoardState(int boardLength) {
-        super(boardLength);
-    }
-    public Piece[][] init(int boardLength){
-        return super.getInitBoard();
-    }
+//    public BoardState(int boardLength) {
+//        super(boardLength);
+//    }
+//    public Piece[][] init(int boardLength){
+//        return super.getInitBoard();
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -69,6 +69,35 @@ public class BoardState extends Board {
 
     @Override
     public String toString() {
-        return super.toString();
+        StringBuilder boardString = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (j == 0) {
+                    if(i < 9){
+                        boardString.append(0).append(i + 1).append("  ");
+                    }else {
+                        boardString.append(i + 1).append("  ");
+                    }
+                }
+                Piece piece = currentState[i][j];
+                if (piece == null) {
+                    boardString.append('-');
+                } else {
+                    if (piece.isQueen()) {
+                        boardString.append(Character.toUpperCase(piece.getColour()));
+                    } else {
+                        boardString.append(piece.getColour());
+                    }
+                }
+                boardString.append(" ");
+            }
+            if(i < 9){
+                boardString.append(" " + 0).append(i + 1).append("\n");
+            }else {
+                boardString.append(" ").append(i + 1).append("\n");
+            }
+        }
+        boardString.append(" \n");
+        return boardString.toString();
     }
 }

@@ -13,8 +13,8 @@ public class GamePlayTest {
     public void testEasyAgainstHardDifficultyPlay() {
         Board b = new Board(8);
         GamePlay game = new GamePlay(b.getBoard());
-        game.setPlayer1(new BotPlayer("Roy", Difficulty.EASY, 'b'));
-        game.setPlayer2(new BotPlayer(Difficulty.HARD,'w'));
+        game.setPlayer1(new BotPlayer(Difficulty.HARD,'b'));
+        game.setPlayer2(new BotPlayer("Roy", Difficulty.EASY, 'w'));
         game.play(-1);
     }
 
