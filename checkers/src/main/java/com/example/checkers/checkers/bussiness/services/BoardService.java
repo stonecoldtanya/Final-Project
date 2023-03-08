@@ -1,16 +1,12 @@
 package com.example.checkers.checkers.bussiness.services;
-import com.example.checkers.checkers.bussiness.Board;
-import com.example.checkers.checkers.bussiness.MoveComments;
 import com.example.checkers.checkers.bussiness.Piece;
 import com.example.checkers.checkers.bussiness.repositories.BoardStateRepository;
-import com.example.checkers.checkers.exceptions.IllegalMoveException;
 import com.example.checkers.checkers.models.dto.BoardStateDTO;
-import com.example.checkers.checkers.models.dto.GameDTO;
 import com.example.checkers.checkers.models.entities.BoardState;
-import com.example.checkers.checkers.models.entities.Game;
 import com.example.checkers.checkers.models.entities.Move;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.Optional;
 
 @Service
@@ -26,16 +22,16 @@ public class BoardService {
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < length / 2 - 1; j++) {
                 if (i % 2 == 1 && j % 2 == 0) {
-                    newBoard[j][i] = new Piece('b');
+                    newBoard[j][i] = new Piece('b', new Point(j,i));
                 } else if (i % 2 == 0 && j % 2 == 1) {
-                    newBoard[j][i] = new Piece('b');
+                    newBoard[j][i] = new Piece('b', new Point(j,i));
                 }
             }
             for (int j = length - 1; j > length / 2; j--) {
                 if (i % 2 == 0 && j % 2 == 1) {
-                    newBoard[j][i] = new Piece('w');
+                    newBoard[j][i] = new Piece('w', new Point(j,i));
                 } else if (i % 2 == 1 && j % 2 == 0) {
-                    newBoard[j][i] = new Piece('w');
+                    newBoard[j][i] = new Piece('w', new Point(j,i));
                 }
             }
         }

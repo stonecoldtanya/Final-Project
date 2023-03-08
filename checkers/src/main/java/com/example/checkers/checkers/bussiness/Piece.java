@@ -1,10 +1,10 @@
 package com.example.checkers.checkers.bussiness;
 
 import java.awt.*;
-import java.util.Locale;
 import java.io.Serializable;
 
 public class Piece implements Serializable{
+    private static final long serialVersionUID = 6529685098267757690L;
     private boolean isQueen;
     private char colour;
     private Point position = new Point(0, 0);
