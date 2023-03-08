@@ -25,6 +25,10 @@ public class Piece {
         this.value = getValue();
     }
 
+    public Piece(char colour, boolean isQueen){
+        this.colour = Character.toUpperCase(colour);
+        this.isQueen = isQueen;
+    }
 
     public boolean isQueen() {
         return isQueen;

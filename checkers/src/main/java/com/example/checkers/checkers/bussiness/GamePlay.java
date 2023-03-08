@@ -1,18 +1,21 @@
 package com.example.checkers.checkers.bussiness;
 
 
+import com.example.checkers.checkers.models.entities.Game;
 import com.example.checkers.checkers.models.entities.Move;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-//@Component
+@Component
 public class GamePlay {
 
     private Board b;
     private Player player1;
     private Player player2;
+//    private Game game;
 
     public Optional<Integer> getFinalScore() {
         return Optional.ofNullable(finalScore);
@@ -23,6 +26,7 @@ public class GamePlay {
     public GamePlay(Piece[][]startingState) {
         this.b = new Board(startingState);
     }
+
     @Autowired
     public GamePlay(Board board) {
         this.b = board;
@@ -31,17 +35,17 @@ public class GamePlay {
     public GamePlay() {
     }
 
-//    @Autowired
-//    @Qualifier("consoleGamer")
-//    public void setPlayer1(Player player1) {
-//        this.player1 = player1;
-//    }
+    @Autowired
+    @Qualifier("consoleGamer")
+    public void setPlayer1(Player player1) {
+        this.player1 = player1;
+    }
 //
-//    @Autowired
-//    @Qualifier("bot")
-//    public void setPlayer2(Player player2) {
-//        this.player2 = player2;
-//    }
+    @Autowired
+    @Qualifier("bot")
+    public void setPlayer2(Player player2) {
+        this.player2 = player2;
+    }
 
     public void play(int moves){
         if (player1 == null || player2 == null) {
@@ -53,8 +57,13 @@ public class GamePlay {
 
         while (b.isFinal() && movesLeft != 0) {
             Move move = whoseTurn.getNextMove(b);
+            if(move == null){
+                System.out.printf("%s is out of possible moves!", whoseTurn.getName(), b.getBoard());
+                b.getScore();
+                return;
+            }
             this.move(move);
-
+            System.out.printf(b.toString());
             System.out.printf("%s made a move: %s \n", whoseTurn.getName(), move.toString());
 
             whoseTurn = (whoseTurn == player1) ? player2 : player1;

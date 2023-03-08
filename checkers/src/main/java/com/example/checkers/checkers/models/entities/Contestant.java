@@ -2,12 +2,8 @@ package com.example.checkers.checkers.models.entities;
 
 import com.example.checkers.checkers.bussiness.Board;
 import com.example.checkers.checkers.bussiness.Player;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name  = "contestants")
@@ -19,12 +15,19 @@ public class Contestant implements Player {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(nullable = false)
     private char color;
 
 //    @OneToMany(mappedBy = "contestant")
 //    private Set<Game> games = new HashSet<>();
 
     public Contestant() {
+    }
+
+    public Contestant(long id, String name, char color) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
     }
 
     public Contestant(String name, char color) {
@@ -40,14 +43,6 @@ public class Contestant implements Player {
         this.id = id;
     }
 
-    public char getColor() {
-        return color;
-    }
-
-    public void setColor(char color) {
-        this.color = color;
-    }
-
     public String getName() {
         return name;
     }
@@ -59,7 +54,7 @@ public class Contestant implements Player {
 
     @Override
     public char getColour() {
-        return color;
+        return this.color;
     }
 
     @Override

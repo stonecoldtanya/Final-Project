@@ -47,7 +47,11 @@ public class BotPlayer implements Player {
         this.name = name;
     }
 
-
+    public BotPlayer(Difficulty difficulty, char b) {
+        this.difficulty = difficulty;
+        this.colour = b;
+        this.depth = difficulty.getDepthDifficulty();
+    }
     /**
      * Instantiates a new Bot player.
      * @param difficulty
@@ -59,7 +63,12 @@ public class BotPlayer implements Player {
     }
 
     public String getName() {
-        return "Otto the AI";
+        if (this.name == null) {
+            return "Otto the AI";
+        }
+        else {
+            return this.name;
+        }
     }
 
     public Move getNextMove(Board board) {
@@ -103,7 +112,7 @@ public class BotPlayer implements Player {
         int highest = Integer.MIN_VALUE;
         List<Move> equal = new ArrayList<>();
         for (Move move : moves){
-            int value = minimax(board, this.depth);
+            int value = minimax(board, this.difficulty.getDepthDifficulty());
             if (value > highest){
                 highest = value;
                 equal.clear();
@@ -121,7 +130,9 @@ public class BotPlayer implements Player {
 
     private Move findRandomMove(List<Move> moves){
         if (moves.size() < 1){
-            throw new RuntimeException("Can't randomly choose from empty list.");
+            System.out.println("The ai has been defeated...Well done, mortal!");
+            moves.add(null);
+//            throw new RuntimeException("Can't randomly choose from empty list.");
         }
         Random rand = new Random();
         int i = rand.nextInt(moves.size());
@@ -130,7 +141,7 @@ public class BotPlayer implements Player {
     private int minimax(Board boardState, int depth){
         int alpha = Integer.MIN_VALUE;
         int beta = Integer.MAX_VALUE;
-        
+
         return minimax(boardState, depth, alpha, beta);
     }
     private int minimax(Board boardState, int depth, int alpha, int beta){

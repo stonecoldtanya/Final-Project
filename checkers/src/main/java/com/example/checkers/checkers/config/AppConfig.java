@@ -11,6 +11,10 @@ public class AppConfig {
         return Difficulty.HARD;
     }
 
+    @Bean("colour")
+    public char getColour(){
+        return 'b';
+    }
     @Bean("name")
     public String getPlayerName() {
         return "Tanya";

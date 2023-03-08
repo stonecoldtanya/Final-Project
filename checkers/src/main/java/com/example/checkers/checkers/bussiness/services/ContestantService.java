@@ -25,11 +25,11 @@ public class ContestantService {
         this.player1 = player1;
     }
 
-    @Autowired
-    @Qualifier("bot")
-    public void setPlayer2(BotPlayer player2) {
-        this.player2 = player2;
-    }
+//    @Autowired
+//    @Qualifier("bot")
+//    public void setPlayer2(BotPlayer player2) {
+//        this.player2 = player2;
+//    }
 
     public ContestantService() {
         players = new ArrayList<>(2);

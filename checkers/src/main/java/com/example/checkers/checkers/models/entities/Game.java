@@ -1,26 +1,18 @@
 package com.example.checkers.checkers.models.entities;
 
-import com.example.checkers.checkers.bussiness.Board;
-import com.example.checkers.checkers.bussiness.BotPlayer;
 import com.example.checkers.checkers.bussiness.Difficulty;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-
-
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 
 @Entity
 @Table(name = "games")
 public class Game {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-//    private GameStatusEnum status;
 
     @Column(nullable = false)
     private int result;
@@ -35,8 +27,10 @@ public class Game {
     @OneToMany
     private List<Move> moves;
 
-    @OneToMany
-    private List<BoardState> states;
+    @ManyToOne
+    @Cascade({CascadeType.ALL})
+    @JoinColumn(name = "states_id")
+    private BoardState current;
 
     public Game(Contestant contestant, Difficulty difficulty) {
         this.contestant = contestant;
@@ -50,13 +44,13 @@ public class Game {
     public Game() {
     }
 
-    public Game(long id, int result, Difficulty difficulty, Contestant contestant, List<Move> moves, List<BoardState> states) {
+    public Game(long id, int result, Difficulty difficulty, Contestant contestant, List<Move> moves, BoardState current) {
         this.id = id;
         this.result = result;
         this.difficulty = difficulty;
         this.contestant = contestant;
         this.moves = moves;
-        this.states = states;
+        this.current = current;
     }
 
     public long getId() {
@@ -99,12 +93,12 @@ public class Game {
         this.moves = moves;
     }
 
-    public List<BoardState> getStates() {
-        return states;
+    public BoardState getCurrent() {
+        return current;
     }
 
-    public void setStates(List<BoardState> states) {
-        this.states = states;
+    public void setCurrent(BoardState current) {
+        this.current = current;
     }
 
     @Override

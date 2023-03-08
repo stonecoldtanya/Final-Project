@@ -1,11 +1,11 @@
 package com.example.checkers.checkers.controllers;
 
 import com.example.checkers.checkers.bussiness.Player;
+import com.example.checkers.checkers.bussiness.services.BoardService;
 import com.example.checkers.checkers.bussiness.services.ContestantService;
 import com.example.checkers.checkers.bussiness.services.GameService;
 import com.example.checkers.checkers.models.dto.GameDTO;
 import com.example.checkers.checkers.models.dto.MoveDTO;
-import com.example.checkers.checkers.models.entities.Contestant;
 import com.example.checkers.checkers.models.entities.Game;
 import com.example.checkers.checkers.models.entities.Move;
 import com.sun.istack.NotNull;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -23,11 +22,13 @@ import java.util.Optional;
 public class GameController {
     private final GameService gameService;
     private final ContestantService playersService;
+    private final BoardService boardService;
 
     @Autowired
-    public GameController(GameService gameService, ContestantService playersService) {
+    public GameController(GameService gameService, ContestantService playersService, BoardService boardService) {
         this.gameService = gameService;
         this.playersService = playersService;
+        this.boardService = boardService;
     }
 
     @GetMapping("/players")
@@ -55,20 +56,33 @@ public class GameController {
         }
     }
 
+    @GetMapping(value = "/{id}/state", produces = "application/json")
+    public @ResponseBody
+    String getGameState(@PathVariable @NotNull Long id) {
+        if (id == null) {
+            new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request, id can not be null");
+        }
+        Optional<GameDTO> result = this.gameService.findGameById(id);
+        if (result.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not found");
+        } else {
+            return result.get().getCurrent().toString();
+        }
+    }
+
     @GetMapping("/board")
-    public String getInitBoard() {
-        return gameService.board.toString();
+    public String getInitBoard(@RequestParam int length) {
+        return boardService.init(length).toString();
     }
 
     @PostMapping("/board")
     public void add(@RequestParam int length){
-        this.gameService.intBoard(length);
+        this.boardService.init(length);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public @ResponseBody GameDTO createGame(@RequestBody GameDTO game) {
-//        game.setContestant(game.getContestant());
         return gameService.createGame(game);
     }
 

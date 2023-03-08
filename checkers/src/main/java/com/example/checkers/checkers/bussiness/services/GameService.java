@@ -1,8 +1,6 @@
 package com.example.checkers.checkers.bussiness.services;
 
-import com.example.checkers.checkers.bussiness.*;
 import com.example.checkers.checkers.bussiness.repositories.BoardStateRepository;
-import com.example.checkers.checkers.exceptions.IllegalMoveException;
 import com.example.checkers.checkers.models.entities.*;
 import com.example.checkers.checkers.models.dto.GameDTO;
 import com.example.checkers.checkers.bussiness.repositories.GameRepository;
@@ -12,19 +10,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class GameService {
-    public Board board;
-    GameRepository gameRepository;
-    BoardStateRepository bsRepo;
+    private final BoardService boardService;
+    private final GameRepository gameRepository;
+    private final BoardStateRepository bsRepo;
 
     @Autowired
-    public GameService(GameRepository gameRepository) {
-        this.board = new Board(8);
+    public GameService(BoardService boardService, GameRepository gameRepository, BoardStateRepository bsRepo) {
+        this.boardService = boardService;
         this.gameRepository = gameRepository;
+        this.bsRepo = bsRepo;
     }
 
     public Game createGame(Game game) {
@@ -39,14 +37,10 @@ public class GameService {
     public GameDTO createGame(GameDTO game){
         Game newGame = GameDTO.updateEntity(new Game(), game);
         Game result = createGame(newGame);
+//        if (result.getCurrent().getCurrentState() == null){
+//            result.setCurrent(boardService.init(8));
+//        }
         return GameDTO.fromEntity(result);
-}
-
-    public void updateState(Move move, Player player) {
-        if (board.getPiece((int) move.next.getX(), (int)  move.next.getY()) != null) {
-            throw new IllegalMoveException(MoveComments.NO_FREE_SPACE);
-        }
-        board.update(move);
     }
 
     public List<GameDTO> getAllGames() {
@@ -58,10 +52,6 @@ public class GameService {
         return game.map(GameDTO::fromEntity);
     }
 
-    public Board intBoard(int length) {
-        Board b = new Board(length);
-        return b;
-    }
 
 //    public Game connectToGame(Long gameId) {
 //        Optional<Game> optionalGame = gameRepository.findById(gameId);

@@ -17,31 +17,38 @@ public class GameDTO {
 
     private Difficulty difficulty;
 
-    private List<BoardState> states;
+    private BoardState current;
 
     public GameDTO() {
     }
 
 
-    public GameDTO(Long id, Contestant contestant, Difficulty difficulty) {
+    public GameDTO(Long id, Contestant contestant, Difficulty difficulty, BoardState current) {
         this.id = id;
         this.contestant = contestant;
         this.difficulty = difficulty;
+        this.current = current;
     }
 
     public static GameDTO fromEntity(Game entity) {
-        return new GameDTO(entity.getId(), entity.getContestant(), entity.getDifficulty());
+        return new GameDTO(entity.getId(), entity.getContestant(), entity.getDifficulty(), entity.getCurrent());
     }
 
     public static Game updateEntity(Game game, GameDTO dto) {
-        // don't change the id
         game.setContestant(dto.getContestant());
         game.setDifficulty(dto.getDifficulty());
-
+        game.setCurrent(dto.getCurrent());
         return game;
     }
 
 
+    public BoardState getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(BoardState current) {
+        this.current = current;
+    }
 
     public Long getId() {
         return id;

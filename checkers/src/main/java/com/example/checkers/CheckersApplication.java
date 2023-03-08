@@ -8,12 +8,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
-@ComponentScan({"com.example.checkers.checkers.bussiness; com.example.checkers.checkers.controllers"})
+@ComponentScan({"com.example.checkers.checkers.bussiness; com.example.checkers.checkers.controllers; com.example.checkers"})
 @EnableAutoConfiguration
 public class CheckersApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CheckersApplication.class, args);
 //		ApplicationContext context = SpringApplication.run(CheckersApplication.class, args);
-		App app;
 	}
 }
