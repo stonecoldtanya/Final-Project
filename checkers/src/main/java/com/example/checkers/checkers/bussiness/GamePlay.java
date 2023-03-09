@@ -1,8 +1,6 @@
 package com.example.checkers.checkers.bussiness;
 
 
-import com.example.checkers.checkers.models.entities.Game;
-import com.example.checkers.checkers.models.entities.Move;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -84,7 +82,7 @@ public class GamePlay {
                 System.out.printf("It's a draw! What a shame!");
             }
         }
-        if (!b.isFinal()) {
+        if (!b.isFinal() || (b.getPieceWhite() ==0 && b.getQueenWhite() == 0) || (b.getPieceBlack() ==0 && b.getQueenBlack() == 0)) {
             finalScore = b.getScore();
 
             System.out.printf("Game Over!\n");

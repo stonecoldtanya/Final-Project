@@ -1,6 +1,7 @@
 package com.example.checkers.checkers.models.entities;
 
 import com.example.checkers.checkers.bussiness.Board;
+import com.example.checkers.checkers.bussiness.Move;
 import com.example.checkers.checkers.bussiness.Player;
 import javax.persistence.*;
 import java.util.Objects;

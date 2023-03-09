@@ -1,9 +1,12 @@
 package com.example.checkers.checkers.bussiness.services;
+import com.example.checkers.checkers.bussiness.Move;
+import com.example.checkers.checkers.bussiness.MoveComments;
 import com.example.checkers.checkers.bussiness.Piece;
 import com.example.checkers.checkers.bussiness.repositories.BoardStateRepository;
+import com.example.checkers.checkers.exceptions.IllegalMoveException;
 import com.example.checkers.checkers.models.dto.BoardStateDTO;
 import com.example.checkers.checkers.models.entities.BoardState;
-import com.example.checkers.checkers.models.entities.Move;
+import com.example.checkers.checkers.models.entities.MoveRequest;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -44,11 +47,13 @@ public class BoardService {
         return bs.map(BoardStateDTO::fromEntity);
     }
 
-//    public void updateState(BoardState board, Move move) {
-//        if (board.getPiece((int) move.next.getX(), (int)  move.next.getY()) != null) {
+    public void updateState(BoardState board, MoveRequest move) {
+//        if (board.getPiece((int) move.getNextX(), (int)  move.getGetNextY()) != null) {
 //            throw new IllegalMoveException(MoveComments.NO_FREE_SPACE);
 //        }
-//        board.update(move);
-//    }
+//        Point current = new Point(move.getCurrentX(), move.getCurrentY());
+//        Point next = new Point(move.getNextX(), move.getGetNextY());
+//        board.update(new Move(current, next));
+    }
 
 }

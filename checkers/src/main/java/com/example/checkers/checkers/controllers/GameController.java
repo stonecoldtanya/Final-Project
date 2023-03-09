@@ -3,18 +3,18 @@ package com.example.checkers.checkers.controllers;
 import com.example.checkers.checkers.bussiness.services.BoardService;
 import com.example.checkers.checkers.bussiness.services.ContestantService;
 import com.example.checkers.checkers.bussiness.services.GameService;
+import com.example.checkers.checkers.exceptions.GameException;
 import com.example.checkers.checkers.models.dto.BoardStateDTO;
 import com.example.checkers.checkers.models.dto.GameDTO;
-import com.example.checkers.checkers.models.dto.MoveDTO;
 import com.example.checkers.checkers.models.entities.Contestant;
-import com.example.checkers.checkers.models.entities.Game;
-import com.example.checkers.checkers.models.entities.Move;
+import com.example.checkers.checkers.models.entities.MoveRequest;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import javax.validation.Valid;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -86,26 +86,30 @@ public class GameController {
 
     }
 
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public @ResponseBody GameDTO createGame(@RequestBody GameDTO game) {
         return gameService.createGame(game);
     }
 
+
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/move")
-    public List<Move> move(@Valid @RequestBody MoveDTO request, Game game){
-//        MoveDTO result = game.move(request);
-//        moveAi(game);
-        return null;
+    public @ResponseBody GameDTO move(@RequestBody GameDTO game, MoveRequest request){
+        return gameService.update(game, request);
     }
 
-//    @PostMapping("/connect")
-//    public @ResponseBody GameDTO connect(@RequestBody GameDTO game){
-//        return gameService.connectToGame(game.getId());
-//    }
-
-
+    @DeleteMapping ("/{id}")
+    public ResponseEntity<?> deleteCity(@PathVariable("id") Long id) {
+        try {
+            gameService.delete(id);
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        } catch (GameException ex) {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 //    @PostMapping("/turn")
 //    public TurnResponse turn(@RequestBody @Valid TurnRequest request) {
 //        if (gameService.isGameOver()) {

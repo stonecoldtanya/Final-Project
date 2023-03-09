@@ -1,17 +1,11 @@
-package com.example.checkers.checkers.models.entities;
+package com.example.checkers.checkers.bussiness;
 
 
 import javax.persistence.*;
 import java.awt.*;
 import java.util.Objects;
 
-@Entity
-@Table(name = "moves")
 public class Move {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
     public boolean isBTPlayer;
     public Point current;
     public Point next;
@@ -25,6 +19,13 @@ public class Move {
         this.next = next;
     }
 
+    public Move() {
+    }
+
+    public Move(int x, int y, int nextX, int nextY) {
+        this.current = new Point(x, y);
+        this.next = new Point(nextX, nextY);
+    }
 
     public Move(Point current, Point next) {
         this.current = current;

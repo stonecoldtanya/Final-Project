@@ -1,6 +1,8 @@
 package com.example.checkers.checkers.bussiness.services;
 
+import com.example.checkers.checkers.bussiness.Move;
 import com.example.checkers.checkers.bussiness.repositories.BoardStateRepository;
+import com.example.checkers.checkers.exceptions.GameException;
 import com.example.checkers.checkers.models.entities.*;
 import com.example.checkers.checkers.models.dto.GameDTO;
 import com.example.checkers.checkers.bussiness.repositories.GameRepository;
@@ -53,18 +55,27 @@ public class GameService {
         return game.map(GameDTO::fromEntity);
     }
 
+    public void delete(Long id) throws GameException{
+        try {
+            Game game = gameRepository.findById(id).orElse(null);
+            if (game == null) {
+                throw new GameException("There is no such game!");
+            } else {
+                gameRepository.deleteById(id);
+            }
+        } catch (GameException ex) {
+            throw ex;
+        }
+    }
 
-//    public Game connectToGame(Long gameId) {
-//        Optional<Game> optionalGame = gameRepository.findById(gameId);
-//
-//        Game game = optionalGame.get();
-//
-//        if (game.getSecondPlayer() != null) {
-//            throw new NullPointerException("u might need a bot!");
-//        }
-//
-//        game.setSecondPlayer(new BotPlayer(game.getDifficulty()));
-//        gameRepository.save(game);
-//        return game;
-//    }
+    public GameDTO update(GameDTO game, MoveRequest move) {
+        Game updated = GameDTO.updateEntity(new Game(), game);
+        BoardState boardState = updated.getCurrent();
+        boardService.updateState(boardState, move);
+        updated.setCurrent(boardState);
+
+        Game result = createGame(updated);
+        return GameDTO.fromEntity(result);
+    }
+
 }

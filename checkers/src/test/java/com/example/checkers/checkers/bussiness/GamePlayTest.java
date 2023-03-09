@@ -1,6 +1,5 @@
 package com.example.checkers.checkers.bussiness;
 
-import com.example.checkers.checkers.models.entities.Move;
 import org.junit.jupiter.api.Test;
 
 

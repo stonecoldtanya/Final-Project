@@ -16,7 +16,7 @@ public class App{
         this.game = game;
     }
 
-    protected App() {
+    public App() {
         this.game = null;
     }
 

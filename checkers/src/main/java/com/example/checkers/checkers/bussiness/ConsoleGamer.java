@@ -2,7 +2,6 @@ package com.example.checkers.checkers.bussiness;
 
 import java.awt.*;
 
-import com.example.checkers.checkers.models.entities.Move;
 import org.springframework.stereotype.Component;
 import java.util.Scanner;
 
@@ -39,7 +38,6 @@ public class ConsoleGamer implements Player {
     public Move getNextMove(Board state) {
         System.out.println("Game progress:");
         System.out.println(state.toString());
-
         System.out.println("What is your next move?");
         Scanner input = new Scanner(System.in);
 
@@ -49,7 +47,6 @@ public class ConsoleGamer implements Player {
         int rowNext = input.nextInt();
         int columnNext = input.nextInt();
         Point next = new Point(rowNext, columnNext);
-
         return new Move(current, next);
     }
 

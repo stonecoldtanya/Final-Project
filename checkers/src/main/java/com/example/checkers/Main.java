@@ -17,7 +17,7 @@ public class Main {
 //        System.out.println(b.getPieceBlack());
 
         Piece[][] bor = {{null, null, null, null, null, null, null, null},
-                        {null,null, null, null, null, null, null, null},
+                         {null,null, new Piece('b', false), null, null, null, null, null},
                         {null, null, null,null, null, null, null, null},
                         { null, null, null, null, null, null,null, null},
                         {null, null,null, null, null, null, null, null},
@@ -29,7 +29,7 @@ public class Main {
         System.out.println(borde.getQueenBlack());
         System.out.println(borde.getQueenWhite());
         GamePlay game = new GamePlay(borde.getBoard());
-        game.setPlayer1(new BotPlayer(Difficulty.HARD, 'b'));
+        game.setPlayer1(new BotPlayer(Difficulty.BOT_EXPERT, 'b'));
         game.setPlayer2(new ConsoleGamer("Tanya", 'w'));
 
         game.play(-1);
