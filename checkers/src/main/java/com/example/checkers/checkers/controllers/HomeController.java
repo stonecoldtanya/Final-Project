@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping()
 public class HomeController {
-    private final LoggedUser userSession;
+    private final LoggedUser loggedUser;
     private final ContestantService userService;
 
     public HomeController(LoggedUser userSession, ContestantService userService) {
-        this.userSession = userSession;
+        this.loggedUser = userSession;
         this.userService = userService;
     }
 
     @GetMapping("/home")
     private String getHome(Model model) {
-        if (!userSession.isLogged()) {
+        if (!loggedUser.isLogged()) {
             return "/index";
         }
         return "/home";
@@ -27,7 +27,7 @@ public class HomeController {
 
     @PostMapping("home")
     private String home(Model model){
-        if (!userSession.isLogged()) {
+        if (!loggedUser.isLogged()) {
             return "/index";
         }
         return "/home";
