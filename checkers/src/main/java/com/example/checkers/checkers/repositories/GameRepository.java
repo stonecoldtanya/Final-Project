@@ -1,4 +1,4 @@
-package com.example.checkers.checkers.bussiness.repositories;
+package com.example.checkers.checkers.repositories;
 
 import com.example.checkers.checkers.models.entities.Game;
 import org.springframework.data.jpa.repository.JpaRepository;

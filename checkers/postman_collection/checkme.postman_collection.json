@@ -1,0 +1,219 @@
+{
+	"info": {
+		"_postman_id": "7eef2814-0f30-486b-bd80-8697d10626d8",
+		"name": "checkme",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/games",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"contestant\": {\r\n    \"name\": \"Leya\",\r\n    \"color\": \"b\"\r\n},\r\n\r\n\"difficulty\":3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/games",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/games/1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/games/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/games/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/games/2/state",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"2",
+						"state"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "localhost:8080/games/1",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/games/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"games",
+								"2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 08 Mar 2023 15:33:01 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 2,\n    \"contestant\": {\n        \"id\": 2,\n        \"name\": \"awq\",\n        \"oppositeColour\": \"b\",\n        \"colour\": \"\\u0000\"\n    },\n    \"difficulty\": \"BOT_EXPERT\",\n    \"current\": {\n        \"id\": 2,\n        \"currentState\": [\n            [\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                }\n            ],\n            [\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null\n            ],\n            [\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"b\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                }\n            ],\n            [\n                null,\n                null,\n                null,\n                null,\n                null,\n                null,\n                null,\n                null\n            ],\n            [\n                null,\n                null,\n                null,\n                null,\n                null,\n                null,\n                null,\n                null\n            ],\n            [\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null\n            ],\n            [\n                null,\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                }\n            ],\n            [\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null,\n                {\n                    \"colour\": \"w\",\n                    \"position\": {\n                        \"x\": 0,\n                        \"y\": 0\n                    },\n                    \"queen\": false\n                },\n                null\n            ]\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "localhost:8080/games/3/state",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/games/3/state",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"3",
+						"state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/games/2/board",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/games/2/board",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"2",
+						"board"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/games/2/player",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/games/2/player",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"2",
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/games/7/moves",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"currentX\" : 5,\r\n\"currentY\": 4,\r\n\"nextX\": 4,\r\n\"nextY\":5\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/games/7/moves",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"7",
+						"moves"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

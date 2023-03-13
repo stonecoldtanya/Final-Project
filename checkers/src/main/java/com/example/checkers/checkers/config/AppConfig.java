@@ -1,6 +1,7 @@
 package com.example.checkers.checkers.config;
 
 import com.example.checkers.checkers.bussiness.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,6 +30,11 @@ public class AppConfig {
     public Board getStartingState() {
         Board b = new Board(8);
         return  b;
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
 }

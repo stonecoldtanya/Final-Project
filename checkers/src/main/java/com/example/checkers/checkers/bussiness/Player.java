@@ -1,11 +1,11 @@
 package com.example.checkers.checkers.bussiness;
 
 public interface Player {
-    public String getName();
+    String getName();
 
-    public Move getNextMove(Board board);
+    Move getNextMove(Board board);
 
-    public char getColour();
+    char getColor();
 
     char getOppositeColour();
 }

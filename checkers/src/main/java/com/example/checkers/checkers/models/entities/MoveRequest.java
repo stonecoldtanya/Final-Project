@@ -20,6 +20,13 @@ public class MoveRequest {
     public MoveRequest() {
     }
 
+    public MoveRequest(int currentX, int currentY, int nextX, int nextY) {
+        this.currentX = currentX;
+        this.currentY = currentY;
+        this.nextX = nextX;
+        this.nextY = nextY;
+    }
+
     public long getId() {
         return id;
     }

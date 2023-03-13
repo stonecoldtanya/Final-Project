@@ -1,7 +1,6 @@
 package com.example.checkers;
 import com.example.checkers.checkers.bussiness.GamePlay;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 

@@ -1,14 +1,14 @@
 package com.example.checkers.checkers.models.entities;
-
 import com.example.checkers.checkers.bussiness.Board;
 import com.example.checkers.checkers.bussiness.Piece;
 
 import javax.persistence.*;
 import java.util.Objects;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "states")
-public class BoardState{
+public class BoardState extends Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -47,12 +47,10 @@ public class BoardState{
         this.currentState = currentState;
     }
 
-//    public BoardState(int boardLength) {
-//        super(boardLength);
-//    }
-//    public Piece[][] init(int boardLength){
-//        return super.getInitBoard();
-//    }
+    public BoardState(int boardLength) {
+        super(boardLength);
+    }
+
 
     @Override
     public boolean equals(Object o) {

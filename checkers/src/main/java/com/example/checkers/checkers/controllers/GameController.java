@@ -99,8 +99,19 @@ public class GameController {
         return gameService.update(game, request);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{id}/moves")
+    public @ResponseBody GameDTO move(@PathVariable @NotNull Long id, @RequestBody MoveRequest request){
+        Optional<GameDTO> result = this.gameService.findGameById(id);
+
+        if (result.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not found");
+        }
+        return gameService.update(result.get(), request);
+    }
+
     @DeleteMapping ("/{id}")
-    public ResponseEntity<?> deleteCity(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteGame(@PathVariable("id") Long id) {
         try {
             gameService.delete(id);
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);

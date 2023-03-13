@@ -4,6 +4,7 @@ import com.example.checkers.checkers.bussiness.Difficulty;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,7 +24,10 @@ public class Game {
     @JoinColumn(name = "contestant_id")
     private Contestant contestant;
 
-    @ManyToOne
+    @OneToMany
+    private List<MoveRequest> moves;
+
+    @OneToOne
     @Cascade({CascadeType.ALL})
     @JoinColumn(name = "states_id")
     private BoardState current;
@@ -80,6 +84,9 @@ public class Game {
         this.contestant = contestant;
     }
 
+    public Game(List<MoveRequest> moves) {
+        this.moves = moves;
+    }
 
     public BoardState getCurrent() {
         return current;

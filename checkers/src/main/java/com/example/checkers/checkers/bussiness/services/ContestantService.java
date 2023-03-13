@@ -1,53 +1,65 @@
 package com.example.checkers.checkers.bussiness.services;
 
-import com.example.checkers.checkers.bussiness.BotPlayer;
-import com.example.checkers.checkers.bussiness.Difficulty;
-import com.example.checkers.checkers.bussiness.Player;
+import com.example.checkers.checkers.repositories.ContestantsRepository;
 import com.example.checkers.checkers.exceptions.PlayerNotFoundException;
+import com.example.checkers.checkers.models.dto.ContestantDTO;
+import com.example.checkers.checkers.models.dto.UserLoginDTO;
+import com.example.checkers.checkers.models.dto.UserRegistrationDTO;
 import com.example.checkers.checkers.models.entities.Contestant;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.example.checkers.checkers.session.LoggedUser;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 @Service
 public class ContestantService {
-    List<Player> players;
-    private Player player1 = new Contestant("Lea", 'b');
-    private Player player2 = new BotPlayer();
+    private final ContestantsRepository userRepository;
+    private LoggedUser userSession;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    @Qualifier("consoleGamer")
-    public void setPlayer1(Player player1) {
-        this.player1 = player1;
+    public ContestantService(ContestantsRepository userRepository, LoggedUser userSession, ModelMapper modelMapper) {
+        this.userRepository = userRepository;
+        this.userSession = userSession;
+        this.modelMapper = modelMapper;
     }
 
-//    @Autowired
-//    @Qualifier("bot")
-//    public void setPlayer2(BotPlayer player2) {
-//        this.player2 = player2;
-//    }
-
-    public ContestantService() {
-        players = new ArrayList<>(2);
-        players.add(player1);
-        players.add(player2);
+    public void register(UserRegistrationDTO registrationDTO) {
+        Contestant user = modelMapper.map(registrationDTO, Contestant.class);
+        userRepository.save(user);
     }
 
-    public List<Player> getPlayers() {
-        return players;
+    public boolean login(UserLoginDTO loginDTO) {
+        Optional<Contestant> user = userRepository.findByUsername(loginDTO.getUsername());
+        if (user.isEmpty()) return false;
+        if (!user.get().getPassword().equals(loginDTO.getPassword())) return false;
+        userSession.login(user.get());
+        return true;
+    }
+    public Contestant getLoggedUser(){
+        return userRepository.findById(userSession.getId()).get();
+    }
+    public void logout() {
+        userSession.logout();
     }
 
-    public Player getPlayer(String name) {
-        List<Player> collect = players.stream()
-                .filter(e -> e.getName().equals(name))
-                .collect(Collectors.toList());
-        if (collect.size() > 0) {
-            return collect.get(0);
+
+    public Optional<Contestant> findById(long id) {
+        return this.userRepository.findById(id);
+    }
+
+    public List<ContestantDTO> getPlayers() {
+        return this.userRepository.findAll().stream().map(ContestantDTO::fromEntity).collect(Collectors.toList());
+    }
+
+    public Optional<ContestantDTO> findContestantById(Long id) {
+        Optional<Contestant> gamer = userRepository.findById(id);
+        if (gamer.isEmpty()){
+            throw new PlayerNotFoundException("Player" + "not found");
         }
-        throw new PlayerNotFoundException("Player" + getPlayer(name) + "not found");
+        return gamer.map(ContestantDTO::fromEntity);
     }
 }

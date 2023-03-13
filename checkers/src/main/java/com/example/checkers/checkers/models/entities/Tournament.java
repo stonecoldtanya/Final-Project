@@ -1,7 +1,6 @@
 package com.example.checkers.checkers.models.entities;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity

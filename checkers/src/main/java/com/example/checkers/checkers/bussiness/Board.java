@@ -60,7 +60,7 @@ public class Board {
                     this.board[i][j] = new Piece(oldPiece.getColour());
                 }
             }
-            }
+        }
     }
 
     /**
@@ -84,7 +84,7 @@ public class Board {
      */
     public Board(Board previousState, Move move) {
         this.board = deepCopy(previousState.board);
-        char symbol = move.isBTPlayer() ? player.getColour() : player.getOppositeColour();
+        char symbol = move.isBTPlayer() ? player.getColor() : player.getOppositeColour();
         this.update(move);
         this.originMove = move;
     }
@@ -417,17 +417,17 @@ public class Board {
      * @param colour the colour of the upgraded piece
      */
     private void addQueens(Move m, char colour) {
-            Piece piece = getPiece(m.getCurrent().x, m.getCurrent().y);
-            if (m.next.x == 0 && colour == 'w') {
-                m.setQueenPiece();
-                piece.setQueen(true);
-                removePiece(piece);
-                addPiece(piece);
-            } else if (m.next.x == 7 && colour == 'b') {
-                m.setQueenPiece();
-                piece.setQueen(true);
-                removePiece(piece);
-                addPiece(piece);
+        Piece piece = getPiece(m.getCurrent().x, m.getCurrent().y);
+        if (m.next.x == 0 && colour == 'w') {
+            m.setQueenPiece();
+            piece.setQueen(true);
+            removePiece(piece);
+            addPiece(piece);
+        } else if (m.next.x == 7 && colour == 'b') {
+            m.setQueenPiece();
+            piece.setQueen(true);
+            removePiece(piece);
+            addPiece(piece);
         }
     }
 
@@ -453,11 +453,11 @@ public class Board {
             for (int j = 0; j < boardLength / 2 - 1; j++) {
                 if (i % 2 == 1 && j % 2 ==0) {
                     newBoard[j][i] = new Piece('b');
-               }
+                }
                 else if(i % 2 == 0 && j % 2 ==1){
                     newBoard[j][i] = new Piece('b');
                 }
-                }
+            }
             for (int j = boardLength - 1; j > boardLength / 2; j--) {
                 if (i % 2 == 0 && j % 2 ==1) {
                     newBoard[j][i] = new Piece('w');
@@ -547,7 +547,7 @@ public class Board {
     }
 
     /**
-     * Evaluates which players is the winner
+     * Evaluates which player is the winner
      */
     private char getWinner() {
         if (this.pieceWhite == 0 && this.queenWhite == 0 || possibleMoves(this, 'w').size() == 0){
@@ -590,6 +590,9 @@ public class Board {
      * @return state of the board
      */
     public Piece[][] getBoard() {
+        if (boardLength == 0){
+            getInitBoard();
+        }
         return board;
     }
 
@@ -622,5 +625,9 @@ public class Board {
      */
     public int getPieces() {
         return pieceWhite + pieceBlack + queenBlack + queenWhite;
+    }
+
+    public void setBoard(Piece[][] board) {
+        this.board = board;
     }
 }

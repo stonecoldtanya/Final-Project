@@ -1,6 +1,5 @@
-package com.example.checkers.checkers.bussiness.repositories;
+package com.example.checkers.checkers.repositories;
 
-import com.example.checkers.checkers.bussiness.Move;
 import com.example.checkers.checkers.models.entities.MoveRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

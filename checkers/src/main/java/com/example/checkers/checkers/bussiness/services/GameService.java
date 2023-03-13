@@ -1,11 +1,11 @@
 package com.example.checkers.checkers.bussiness.services;
 
-import com.example.checkers.checkers.bussiness.Move;
-import com.example.checkers.checkers.bussiness.repositories.BoardStateRepository;
+import com.example.checkers.checkers.bussiness.Board;
+import com.example.checkers.checkers.repositories.BoardStateRepository;
 import com.example.checkers.checkers.exceptions.GameException;
 import com.example.checkers.checkers.models.entities.*;
 import com.example.checkers.checkers.models.dto.GameDTO;
-import com.example.checkers.checkers.bussiness.repositories.GameRepository;
+import com.example.checkers.checkers.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -55,7 +55,7 @@ public class GameService {
         return game.map(GameDTO::fromEntity);
     }
 
-    public void delete(Long id) throws GameException{
+    public void delete(Long id) throws GameException {
         try {
             Game game = gameRepository.findById(id).orElse(null);
             if (game == null) {
@@ -70,11 +70,12 @@ public class GameService {
 
     public GameDTO update(GameDTO game, MoveRequest move) {
         Game updated = GameDTO.updateEntity(new Game(), game);
-        BoardState boardState = updated.getCurrent();
-        boardService.updateState(boardState, move);
-        updated.setCurrent(boardState);
-
-        Game result = createGame(updated);
+        Game result = updated;
+        Board b = new Board(result.getCurrent().getCurrentState());
+        BoardState boardState = new BoardState(b.getBoardLength());
+        boardState.setCurrentState(result.getCurrent().getCurrentState());
+//        boardService.updateState(boardState, move);
+        result.getCurrent().setCurrentState(boardService.updateState(boardState, move).getCurrentState());
         return GameDTO.fromEntity(result);
     }
 

@@ -1,7 +1,5 @@
 package com.example.checkers.checkers.bussiness;
 
-
-import javax.persistence.*;
 import java.awt.*;
 import java.util.Objects;
 
